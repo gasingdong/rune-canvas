@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import frames from '../assets/frames.png';
 import { Rarity } from '../utility/card-enums';
+import 'normalize.css';
+import '../stylesheets/main.scss';
 
 const Home: React.FC = () => {
   const [rarity, setRarity] = useState<Rarity>(Rarity.COMMON);
@@ -63,8 +65,8 @@ const Home: React.FC = () => {
   }, [rarity]);
 
   return (
-    <>
-      <canvas ref={canvasRef} width={350} height={600} />
+    <main className="container">
+      <canvas ref={canvasRef} width={327} height={500} />
       <div className="controls">
         <select
           name="rarity"
@@ -78,7 +80,7 @@ const Home: React.FC = () => {
           <option value={Rarity.NONE}>None</option>
         </select>
       </div>
-    </>
+    </main>
   );
 };
 
