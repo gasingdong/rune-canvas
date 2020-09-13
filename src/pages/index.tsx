@@ -1,31 +1,36 @@
 import React, { useRef, useEffect, useState } from 'react';
 import frames from '../assets/frames.png';
+import regions from '../assets/regions.png';
 import { Rarity } from '../utility/card-enums';
+import Region from '../utility/region';
 import 'normalize.css';
 import '../stylesheets/main.scss';
 
 const Home: React.FC = () => {
   const [rarity, setRarity] = useState<Rarity>(Rarity.COMMON);
+  const [region, setRegion] = useState<Region>(Region.RUNETERRA);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageSources: { [key: string]: never } = {
+    frames,
+    regions,
+  };
 
   const updateRarity = (event: React.ChangeEvent<HTMLSelectElement>): void => {
-    let newRarity = null;
-    const selectedRarity = event.target.value;
+    const matching = Object.values(Rarity).filter(
+      (element) => element === event.target.value
+    );
 
-    switch (selectedRarity) {
-      case 'rare':
-        newRarity = Rarity.RARE;
-        break;
-      case 'epic':
-        newRarity = Rarity.EPIC;
-        break;
-      case 'none':
-        newRarity = Rarity.NONE;
-        break;
-      default:
-        newRarity = Rarity.COMMON;
+    if (matching.length > 0) {
+      setRarity(matching[0]);
     }
-    setRarity(newRarity);
+  };
+
+  const updateRegion = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+    const selectedRegion = Region.getRegion(event.target.value);
+
+    if (selectedRegion) {
+      setRegion(selectedRegion);
+    }
   };
 
   const sprites = {
@@ -42,27 +47,51 @@ const Home: React.FC = () => {
       const ctx = canvas.getContext('2d');
 
       if (ctx) {
-        const image = new Image();
-        image.onload = (): void => {
+        const images: { [key: string]: HTMLImageElement } = {};
+        let count = 0;
+        const finishLoading = (): void => {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           const xDiff = sprites[rarity];
+          const ratio = images.frames.height / 653;
           ctx.drawImage(
-            image,
+            images.frames,
             xDiff,
             0,
             653,
-            image.height,
+            images.frames.height,
             0,
             0,
-            653 * 0.5,
-            image.height * 0.5
+            canvas.width,
+            canvas.width * ratio
+          );
+          ctx.drawImage(
+            images.regions,
+            region.position[0],
+            region.position[1],
+            128,
+            128,
+            132,
+            400,
+            128 * 0.4,
+            128 * 0.4
           );
         };
-        image.onerror = (e): void => console.log(e);
-        image.src = frames;
+        Object.entries(imageSources).forEach((entry) => {
+          const [id, src] = entry;
+          const image = new Image();
+          image.onload = (): void => {
+            count += 1;
+
+            if (count === Object.keys(imageSources).length) {
+              finishLoading();
+            }
+          };
+          image.src = src;
+          images[id] = image;
+        });
       }
     }
-  }, [rarity]);
+  }, [rarity, region]);
 
   return (
     <main className="container">
@@ -74,10 +103,23 @@ const Home: React.FC = () => {
           onChange={updateRarity}
           value={rarity}
         >
-          <option value={Rarity.COMMON}>Common</option>
-          <option value={Rarity.RARE}>Rare</option>
-          <option value={Rarity.EPIC}>Epic</option>
-          <option value={Rarity.NONE}>None</option>
+          {Object.values(Rarity).map((element) => (
+            <option key={element} value={element}>
+              {element.charAt(0).toUpperCase() + element.slice(1)}
+            </option>
+          ))}
+        </select>
+        <select
+          name="region"
+          id="region"
+          onChange={updateRegion}
+          value={region.toString()}
+        >
+          {Region.getRegions().map((element) => (
+            <option key={element.toString()} value={element.toString()}>
+              {element.name}
+            </option>
+          ))}
         </select>
       </div>
     </main>
