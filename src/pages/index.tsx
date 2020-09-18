@@ -9,11 +9,11 @@ import '../stylesheets/main.scss';
 const Home: React.FC = () => {
   const [rarity, setRarity] = useState<Rarity>(Rarity.COMMON);
   const [region, setRegion] = useState<Region>(Region.RUNETERRA);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imageSources: { [key: string]: never } = {
+  const [sources, setSources] = useState<Record<string, never | string>>({
     frames,
     regions,
-  };
+  });
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const updateRarity = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     const matching = Object.values(Rarity).filter(
@@ -30,6 +30,26 @@ const Home: React.FC = () => {
 
     if (selectedRegion) {
       setRegion(selectedRegion);
+    }
+  };
+
+  const updateContentImage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    const { files } = event.target;
+
+    if (files) {
+      const file = files.item(0);
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = (e: ProgressEvent<FileReader>): void => {
+          if (e?.target?.result) {
+            setSources({ ...sources, content: e.target.result.toString() });
+          }
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
@@ -53,6 +73,20 @@ const Home: React.FC = () => {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           const xDiff = sprites[rarity];
           const ratio = images.frames.height / 653;
+
+          if (images.content) {
+            ctx.drawImage(
+              images.content,
+              0,
+              0,
+              653,
+              images.frames.height,
+              0,
+              0,
+              canvas.width,
+              canvas.width * ratio
+            );
+          }
           ctx.drawImage(
             images.frames,
             xDiff,
@@ -76,22 +110,23 @@ const Home: React.FC = () => {
             128 * 0.4
           );
         };
-        Object.entries(imageSources).forEach((entry) => {
+        Object.entries(sources).forEach((entry) => {
           const [id, src] = entry;
           const image = new Image();
           image.onload = (): void => {
             count += 1;
 
-            if (count === Object.keys(imageSources).length) {
+            if (count === Object.keys(sources).length) {
               finishLoading();
             }
           };
+          console.log(id, src);
           image.src = src;
           images[id] = image;
         });
       }
     }
-  }, [rarity, region]);
+  }, [rarity, region, sources]);
 
   return (
     <main className="container">
@@ -121,6 +156,12 @@ const Home: React.FC = () => {
             </option>
           ))}
         </select>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={updateContentImage}
+          multiple={false}
+        />
       </div>
     </main>
   );
