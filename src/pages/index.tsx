@@ -6,12 +6,23 @@ import Region from '../utility/region';
 import 'normalize.css';
 import '../stylesheets/main.scss';
 
+interface Options {
+  scale: number;
+  offsetX: number;
+  offsetY: number;
+}
+
 const Home: React.FC = () => {
   const [rarity, setRarity] = useState<Rarity>(Rarity.COMMON);
   const [region, setRegion] = useState<Region>(Region.RUNETERRA);
   const [sources, setSources] = useState<Record<string, never | string>>({
     frames,
     regions,
+  });
+  const [options, setOptions] = useState<Options>({
+    scale: 1.0,
+    offsetX: 0,
+    offsetY: 0,
   });
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -31,6 +42,24 @@ const Home: React.FC = () => {
     if (selectedRegion) {
       setRegion(selectedRegion);
     }
+  };
+
+  const updateScale = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setOptions({
+      ...options,
+      scale: parseFloat(event.target.value),
+    });
+  };
+
+  const updateOffset = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    flag: boolean
+  ): void => {
+    setOptions({
+      ...options,
+      offsetX: flag ? options.offsetX : parseFloat(event.target.value),
+      offsetY: flag ? parseFloat(event.target.value) : options.offsetY,
+    });
   };
 
   const updateContentImage = (
@@ -75,16 +104,17 @@ const Home: React.FC = () => {
           const ratio = images.frames.height / 653;
 
           if (images.content) {
+            const contentRatio = images.content.height / images.content.width;
             ctx.drawImage(
               images.content,
               0,
               0,
-              653,
-              images.frames.height,
-              0,
-              0,
-              canvas.width,
-              canvas.width * ratio
+              images.content.width,
+              images.content.height,
+              0 + options.offsetX,
+              0 + options.offsetY,
+              canvas.width * options.scale,
+              canvas.width * contentRatio * options.scale
             );
           }
           ctx.drawImage(
@@ -120,13 +150,12 @@ const Home: React.FC = () => {
               finishLoading();
             }
           };
-          console.log(id, src);
           image.src = src;
           images[id] = image;
         });
       }
     }
-  }, [rarity, region, sources]);
+  }, [rarity, region, sources, options]);
 
   return (
     <main className="container">
@@ -161,6 +190,34 @@ const Home: React.FC = () => {
           accept="image/*"
           onChange={updateContentImage}
           multiple={false}
+        />
+        <input
+          id="scale"
+          type="number"
+          value={options.scale}
+          onChange={updateScale}
+          min={0.01}
+          step={0.01}
+        />
+        <input
+          id="offsetX"
+          type="number"
+          value={options.offsetX}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+            updateOffset(e, false)
+          }
+          min={0.0}
+          step={1}
+        />
+        <input
+          id="offsetY"
+          type="number"
+          value={options.offsetY}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+            updateOffset(e, true)
+          }
+          min={0.0}
+          step={1}
         />
       </div>
     </main>
