@@ -3,6 +3,8 @@
   "extends": [
     "airbnb-typescript",
     "plugin:react/recommended",
+    "plugin:react-native/all",
+    "plugin:react-native-a11y/all",
     "plugin:@typescript-eslint/recommended",
     "prettier/react",
     "prettier/@typescript-eslint",
@@ -17,14 +19,10 @@
     }
   },
   "env": {
-    "es6": true
-  },
-  "globals": {
-    "console": "readonly",
-    "document": "readonly",
-    "window": "readonly",
-    "it": "readonly",
-    "localStorage": "readonly"
+    "es6": true,
+    "browser": true,
+    "node": true,
+    "react-native/react-native": true
   },
   "settings": {
     "react": {
@@ -33,7 +31,8 @@
   },
   "rules": {
     // disable the rule for all files
-    "@typescript-eslint/explicit-function-return-type": "off"
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "react-native/no-single-element-style-arrays": "off"
   },
   "overrides": [
     {
