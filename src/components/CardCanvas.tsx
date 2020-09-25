@@ -30,20 +30,20 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
           const xDiff = sprites[options.rarity];
           const ratio = images.frames.height / 653;
 
-          // if (images.content) {
-          //   const contentRatio = images.content.height / images.content.width;
-          //   ctx.drawImage(
-          //     images.content,
-          //     0,
-          //     0,
-          //     images.content.width,
-          //     images.content.height,
-          //     0 + options.offsetX,
-          //     0 + options.offsetY,
-          //     canvas.width * options.scale,
-          //     canvas.width * contentRatio * options.scale
-          //   );
-          // }
+          if (images.content) {
+            const contentRatio = images.content.height / images.content.width;
+            ctx.drawImage(
+              images.content,
+              0,
+              0,
+              images.content.width,
+              images.content.height,
+              0,
+              0,
+              canvas.width * 1,
+              canvas.width * contentRatio * 1
+            );
+          }
           ctx.drawImage(
             images.frames,
             xDiff,
@@ -82,7 +82,7 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
         });
       }
     }
-  }, []);
+  }, [options]);
 
   return <canvas ref={canvasRef} width={325} height={500} />;
 };
