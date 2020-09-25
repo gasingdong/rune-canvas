@@ -1,0 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+declare module '@createjs/easeljs' {
+  let x: any;
+  export = x;
+}
+
+declare module '*.png' {
+  const value: never;
+  export default value;
+}

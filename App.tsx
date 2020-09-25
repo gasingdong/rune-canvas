@@ -1,7 +1,11 @@
-/* eslint-disable */
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import CardCanvas from './src/components/CardCanvas';
+import frames from './assets/frames.png';
+import regions from './assets/regions.png';
+import { Rarity } from './src/utilities/card-enums';
+import Region from './src/utilities/region';
+import { Options } from './src/utilities/app-enums';
 
 const white = '#fff';
 
@@ -15,10 +19,19 @@ const styles = StyleSheet.create({
 });
 
 const App: React.FC = () => {
+  const [options, setOptions] = useState<Options>({
+    rarity: Rarity.COMMON,
+    region: Region.RUNETERRA,
+    images: {
+      frames,
+      regions,
+    },
+  });
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto"></StatusBar>
+      <Text>Rune Canvas</Text>
+      <CardCanvas options={options} />
     </View>
   );
 };
