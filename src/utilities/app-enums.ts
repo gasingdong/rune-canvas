@@ -5,4 +5,5 @@ export interface Options {
   rarity: Rarity;
   region: Region;
   images: Record<string, never | string>;
+  description: string;
 }

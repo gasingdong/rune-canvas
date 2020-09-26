@@ -27,6 +27,7 @@ const App: React.FC = () => {
       frames,
       regions,
     },
+    description: '',
   });
 
   return (

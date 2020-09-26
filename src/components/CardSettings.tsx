@@ -1,6 +1,6 @@
 import { Picker } from '@react-native-community/picker';
 import React, { Dispatch, ReactText, SetStateAction } from 'react';
-import { Button, View } from 'react-native';
+import { Button, TextInput, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Options } from '../utilities/app-enums';
 import { Rarity } from '../utilities/card-enums';
@@ -56,6 +56,13 @@ const CardSettings: React.FC<CardSettingsProps> = (
     }
   };
 
+  const updateDescription = (text: string): void => {
+    setOptions({
+      ...options,
+      description: text,
+    });
+  };
+
   return (
     <View>
       <Picker selectedValue={options.rarity} onValueChange={updateRarity}>
@@ -80,6 +87,11 @@ const CardSettings: React.FC<CardSettingsProps> = (
         ))}
       </Picker>
       <Button title="Upload card image" onPress={pickCardImage} />
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+        value={options.description}
+        onChangeText={updateDescription}
+      />
     </View>
   );
 };
