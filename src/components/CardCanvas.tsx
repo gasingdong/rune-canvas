@@ -40,6 +40,7 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
         let count = 0;
         const finishLoading = (): void => {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
+
           const xDiff = sprites[options.rarity];
 
           if (images.content) {
@@ -56,6 +57,8 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
               canvas.width * contentRatio * 1
             );
           }
+          ctx.fillStyle = '#1c1c1c';
+          ctx.fillRect(20, 40, 640, 925);
           ctx.drawImage(
             images.frames,
             xDiff,
@@ -78,8 +81,26 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
             128 * 0.4,
             128 * 0.4
           );
-          ctx.font = '32.5px Univers55';
+          ctx.fillStyle = 'white';
           ctx.textAlign = 'center';
+          ctx.font = '48px Beaufort-Bold';
+          ctx.fillText(options.name, canvas.width / 2, canvas.height - 315);
+          ctx.font = '70px Beaufort-Bold';
+          ctx.strokeStyle = 'black';
+          const powerX = 88;
+          const powerY = canvas.height - 88;
+          ctx.strokeText('7', powerX, powerY);
+          ctx.fillText('7', powerX, powerY);
+          const healthX = canvas.width - 88;
+          const healthY = canvas.height - 88;
+          ctx.strokeText('7', healthX, healthY);
+          ctx.fillText('7', healthX, healthY);
+          ctx.font = '90px Beaufort-Bold';
+          const manaX = 88;
+          const manaY = 132;
+          ctx.strokeText('8', manaX, manaY);
+          ctx.fillText('8', manaX, manaY);
+          ctx.font = '32.6px Univers55';
           ctx.fillText(
             options.description,
             canvas.width / 2,

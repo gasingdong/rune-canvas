@@ -6,4 +6,8 @@ export interface Options {
   region: Region;
   images: Record<string, never | string>;
   description: string;
+  name: string;
+  power: number;
+  mana: number;
+  health: number;
 }

@@ -56,6 +56,13 @@ const CardSettings: React.FC<CardSettingsProps> = (
     }
   };
 
+  const updateName = (text: string): void => {
+    setOptions({
+      ...options,
+      name: text,
+    });
+  };
+
   const updateDescription = (text: string): void => {
     setOptions({
       ...options,
@@ -87,6 +94,11 @@ const CardSettings: React.FC<CardSettingsProps> = (
         ))}
       </Picker>
       <Button title="Upload card image" onPress={pickCardImage} />
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+        value={options.name}
+        onChangeText={updateName}
+      />
       <TextInput
         style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
         value={options.description}
