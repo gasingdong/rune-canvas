@@ -98,8 +98,8 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
           ctx.font = '90px Beaufort-Bold';
           const manaX = 88;
           const manaY = 132;
-          ctx.strokeText('8', manaX, manaY);
-          ctx.fillText('8', manaX, manaY);
+          ctx.strokeText(`${options.mana}`, manaX, manaY);
+          ctx.fillText(`${options.mana}`, manaX, manaY);
           ctx.font = '32.6px Univers55';
           ctx.fillText(
             options.description,

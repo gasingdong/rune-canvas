@@ -28,6 +28,10 @@ const App: React.FC = () => {
       regions,
     },
     description: '',
+    name: '',
+    power: 0,
+    mana: 0,
+    health: 0,
   });
 
   return (
