@@ -84,7 +84,11 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
           ctx.fillStyle = 'white';
           ctx.textAlign = 'center';
           ctx.font = '48px Beaufort-Bold';
-          ctx.fillText(options.name, canvas.width / 2, canvas.height - 315);
+          ctx.fillText(
+            `${options.name.toUpperCase()}`,
+            canvas.width / 2,
+            canvas.height - 315
+          );
           ctx.font = '70px Beaufort-Bold';
           ctx.strokeStyle = 'black';
           const powerX = 88;
