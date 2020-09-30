@@ -13,6 +13,7 @@ import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { Options } from '../utilities/app-enums';
 import { Rarity } from '../utilities/card-enums';
 import Region from '../utilities/region';
+import ControlledCounter from './ControlledCounter';
 
 interface CardSettingsProps {
   options: Options;
@@ -85,21 +86,45 @@ const CardSettings: React.FC<CardSettingsProps> = (
   };
 
   const increaseMana = (): void => {
-    if (options.mana < 99) {
-      setOptions({
-        ...options,
-        mana: options.mana + 1,
-      });
-    }
+    setOptions({
+      ...options,
+      mana: options.mana + 1,
+    });
   };
 
   const decreaseMana = (): void => {
-    if (options.mana > 0) {
-      setOptions({
-        ...options,
-        mana: options.mana - 1,
-      });
-    }
+    setOptions({
+      ...options,
+      mana: options.mana - 1,
+    });
+  };
+
+  const increasePower = (): void => {
+    setOptions({
+      ...options,
+      power: options.power + 1,
+    });
+  };
+
+  const decreasePower = (): void => {
+    setOptions({
+      ...options,
+      power: options.power - 1,
+    });
+  };
+
+  const increaseHealth = (): void => {
+    setOptions({
+      ...options,
+      health: options.health + 1,
+    });
+  };
+
+  const decreaseHealth = (): void => {
+    setOptions({
+      ...options,
+      health: options.health - 1,
+    });
   };
 
   return (
@@ -126,23 +151,24 @@ const CardSettings: React.FC<CardSettingsProps> = (
         ))}
       </Picker>
       <Button title="Upload card image" onPress={pickCardImage} />
-      <TouchableOpacity>
-        <AntDesign
-          name="minuscircle"
-          size={16}
-          color="black"
-          onPress={decreaseMana}
-        />
-      </TouchableOpacity>
-      <Text>{options.mana}</Text>
-      <TouchableOpacity>
-        <AntDesign
-          name="pluscircle"
-          size={16}
-          color="black"
-          onPress={increaseMana}
-        />
-      </TouchableOpacity>
+      <ControlledCounter
+        title="Mana"
+        decrement={decreaseMana}
+        increment={increaseMana}
+        value={options.mana}
+      />
+      <ControlledCounter
+        title="Power"
+        decrement={decreasePower}
+        increment={increasePower}
+        value={options.power}
+      />
+      <ControlledCounter
+        title="Health"
+        decrement={decreaseHealth}
+        increment={increaseHealth}
+        value={options.health}
+      />
       <TextInput
         style={styles.textBox}
         value={options.name}

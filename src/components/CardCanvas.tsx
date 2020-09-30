@@ -89,12 +89,12 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
           ctx.strokeStyle = 'black';
           const powerX = 88;
           const powerY = canvas.height - 88;
-          ctx.strokeText('7', powerX, powerY);
-          ctx.fillText('7', powerX, powerY);
+          ctx.strokeText(`${options.power}`, powerX, powerY);
+          ctx.fillText(`${options.power}`, powerX, powerY);
           const healthX = canvas.width - 88;
           const healthY = canvas.height - 88;
-          ctx.strokeText('7', healthX, healthY);
-          ctx.fillText('7', healthX, healthY);
+          ctx.strokeText(`${options.health}`, healthX, healthY);
+          ctx.fillText(`${options.health}`, healthX, healthY);
           ctx.font = '90px Beaufort-Bold';
           const manaX = 88;
           const manaY = 132;
