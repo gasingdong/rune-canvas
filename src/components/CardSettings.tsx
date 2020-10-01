@@ -1,19 +1,13 @@
 import { Picker } from '@react-native-community/picker';
 import React, { Dispatch, ReactText, SetStateAction } from 'react';
-import {
-  StyleSheet,
-  Button,
-  TextInput,
-  TouchableOpacity,
-  View,
-  Text,
-} from 'react-native';
+import { StyleSheet, Button, TextInput, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { OptionTypeBase, ValueType } from 'react-select';
 import { Options } from '../utilities/app-enums';
 import { Rarity } from '../utilities/card-enums';
 import Region from '../utilities/region';
 import ControlledCounter from './ControlledCounter';
+import MultiPicker from './MultiPicker';
 
 interface CardSettingsProps {
   options: Options;
@@ -127,6 +121,20 @@ const CardSettings: React.FC<CardSettingsProps> = (
     });
   };
 
+  const updateKeywords = (keywords: ValueType<OptionTypeBase>): void => {
+    if (keywords && keywords.length <= 4) {
+      setOptions({
+        ...options,
+        keywords: new Set(keywords.map((element: OptionTypeBase) => element)),
+      });
+    } else if (!keywords) {
+      setOptions({
+        ...options,
+        keywords: new Set(),
+      });
+    }
+  };
+
   return (
     <View>
       <Picker selectedValue={options.rarity} onValueChange={updateRarity}>
@@ -150,6 +158,10 @@ const CardSettings: React.FC<CardSettingsProps> = (
           />
         ))}
       </Picker>
+      <MultiPicker
+        values={Array.from(options.keywords)}
+        setValues={updateKeywords}
+      />
       <Button title="Upload card image" onPress={pickCardImage} />
       <ControlledCounter
         title="Mana"

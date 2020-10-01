@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import CardCanvas from './src/components/CardCanvas';
 import frames from './assets/frames.png';
 import regions from './assets/regions.png';
-import { Rarity } from './src/utilities/card-enums';
+import { Keyword, Rarity } from './src/utilities/card-enums';
 import Region from './src/utilities/region';
 import { Options } from './src/utilities/app-enums';
 import CardSettings from './src/components/CardSettings';
@@ -32,6 +32,7 @@ const App: React.FC = () => {
     power: 0,
     mana: 0,
     health: 0,
+    keywords: new Set<Keyword>(),
   });
 
   return (

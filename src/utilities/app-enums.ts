@@ -1,4 +1,4 @@
-import { Rarity } from './card-enums';
+import { Keyword, Rarity } from './card-enums';
 import Region from './region';
 
 export interface Options {
@@ -10,4 +10,5 @@ export interface Options {
   power: number;
   mana: number;
   health: number;
+  keywords: Set<Keyword>;
 }

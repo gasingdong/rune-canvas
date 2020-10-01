@@ -11,6 +11,7 @@
     "@createjs/easeljs": "^2.0.0-beta.4",
     "@expo/vector-icons": "^10.2.1",
     "@react-native-community/picker": "^1.8.0",
+    "@types/react-select": "^3.0.21",
     "expo": "~39.0.2",
     "expo-font": "~8.3.0",
     "expo-image-picker": "~9.1.0",
@@ -27,7 +28,8 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.2.tar.gz",
     "react-native-canvas": "^0.1.37",
     "react-native-web": "~0.13.12",
-    "react-native-webview": "^10.9.0"
+    "react-native-webview": "^10.9.0",
+    "react-select": "^3.1.0"
   },
   "devDependencies": {
     "@types/react": "~16.9.35",
