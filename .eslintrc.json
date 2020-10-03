@@ -27,12 +27,16 @@
   "settings": {
     "react": {
       "version": "detect"
+    },
+    "import/resolver": {
+      "node": {}
     }
   },
   "rules": {
     // disable the rule for all files
     "@typescript-eslint/explicit-function-return-type": "off",
-    "react-native/no-single-element-style-arrays": "off"
+    "react-native/no-single-element-style-arrays": "off",
+    "import/extensions": "off"
   },
   "overrides": [
     {
