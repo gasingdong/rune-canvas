@@ -11,6 +11,9 @@ interface CardCanvasProps {
   options: Options;
 }
 
+const gold = '#f0cc70';
+const descriptiveBlue = '#e1eeec';
+
 const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
   const { options } = props;
   const [finishedLoading, setFinishedLoading] = useState(false);
@@ -81,6 +84,65 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
             128 * 0.4,
             128 * 0.4
           );
+          const numKeywords = options.keywords.size;
+
+          if (numKeywords > 0) {
+            const keywordX = 220;
+            const keywordY = canvas.height / 2 + 207;
+            const keywordWidth =
+              ctx.measureText(options.keywords.keys().next().value).width - 31;
+
+            if (numKeywords === 1) {
+              ctx.drawImage(
+                images.keywordLeft,
+                0,
+                0,
+                20,
+                82,
+                keywordX,
+                keywordY,
+                20,
+                82
+              );
+              ctx.drawImage(
+                images.keywordRight,
+                0,
+                0,
+                22,
+                82,
+                keywordX + keywordWidth + 20,
+                keywordY,
+                22,
+                82
+              );
+              ctx.drawImage(
+                images.keywordFill,
+                0,
+                0,
+                170,
+                82,
+                keywordX + 20,
+                keywordY,
+                keywordWidth + 1,
+                82
+              );
+              ctx.drawImage(
+                images.tough,
+                0,
+                0,
+                55,
+                55,
+                keywordX + 20,
+                keywordY + 13,
+                55,
+                55
+              );
+              ctx.fillStyle = gold;
+              ctx.textAlign = 'center';
+              ctx.font = '42px Beaufort-Bold';
+              ctx.fillText('TOUGH', canvas.width / 2 + 32, canvas.height - 249);
+            }
+          }
           ctx.fillStyle = 'white';
           ctx.textAlign = 'center';
           ctx.font = '48px Beaufort-Bold';
@@ -104,7 +166,13 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
           const manaY = 132;
           ctx.strokeText(`${options.mana}`, manaX, manaY);
           ctx.fillText(`${options.mana}`, manaX, manaY);
-          ctx.font = '32.6px Univers55';
+          ctx.font = 'bold 32px Univers55';
+          ctx.fillStyle = descriptiveBlue;
+          ctx.strokeText(
+            options.description,
+            canvas.width / 2,
+            canvas.height - 184
+          );
           ctx.fillText(
             options.description,
             canvas.width / 2,
