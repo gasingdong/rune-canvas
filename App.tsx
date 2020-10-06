@@ -7,6 +7,7 @@ import tough from './assets/tough.png';
 import keywordLeft from './assets/empty_keyword_left.png';
 import keywordFill from './assets/empty_keyword_fill.png';
 import keywordRight from './assets/empty_keyword_right.png';
+import keywordIcons from './assets/keyword_icons.png';
 import { Keyword, Rarity } from './src/utilities/card-enums';
 import Region from './src/utilities/region';
 import { Options } from './src/utilities/app-enums';
@@ -34,6 +35,7 @@ const App: React.FC = () => {
       keywordLeft,
       keywordFill,
       keywordRight,
+      keywordIcons,
     },
     description: '',
     name: '',

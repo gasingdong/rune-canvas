@@ -32,6 +32,14 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
     none: 2040,
   };
 
+  const keywordSprites: { [name: string]: number[] } = {
+    ephemeral: [0, 0],
+    fearsome: [1, 0],
+    tough: [2, 0],
+    fleeting: [0, 1],
+    regeneration: [1, 1],
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
 
@@ -87,19 +95,24 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
           const numKeywords = options.keywords.size;
 
           if (numKeywords > 0) {
-            const keywordX = 220;
+            ctx.fillStyle = gold;
+            ctx.textAlign = 'center';
+            ctx.font = '42px Beaufort-Bold';
             const keywordY = canvas.height / 2 + 207;
+            const keyword = options.keywords.keys().next().value.value;
             const keywordWidth =
-              ctx.measureText(options.keywords.keys().next().value).width - 31;
+              ctx.measureText(keyword.toUpperCase()).width + 50;
+            const keywordX = canvas.width / 2 - keywordWidth / 2;
 
-            if (numKeywords === 1) {
+            if (numKeywords === 1 && keyword in keywordSprites) {
+              const [spriteX, spriteY] = keywordSprites[keyword];
               ctx.drawImage(
                 images.keywordLeft,
                 0,
                 0,
                 20,
                 82,
-                keywordX,
+                keywordX - 20,
                 keywordY,
                 20,
                 82
@@ -110,7 +123,7 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
                 0,
                 22,
                 82,
-                keywordX + keywordWidth + 20,
+                keywordX + keywordWidth - 1,
                 keywordY,
                 22,
                 82
@@ -121,26 +134,27 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
                 0,
                 170,
                 82,
-                keywordX + 20,
+                keywordX - 1,
                 keywordY,
                 keywordWidth + 1,
                 82
               );
               ctx.drawImage(
-                images.tough,
-                0,
-                0,
+                images.keywordIcons,
+                spriteX * 55,
+                spriteY * 55,
                 55,
                 55,
-                keywordX + 20,
+                keywordX - 2,
                 keywordY + 13,
                 55,
                 55
               );
-              ctx.fillStyle = gold;
-              ctx.textAlign = 'center';
-              ctx.font = '42px Beaufort-Bold';
-              ctx.fillText('TOUGH', canvas.width / 2 + 32, canvas.height - 249);
+              ctx.fillText(
+                `${keyword.toUpperCase()}`,
+                canvas.width / 2 + 32,
+                canvas.height - 249
+              );
             }
           }
           ctx.fillStyle = 'white';
