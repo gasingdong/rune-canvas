@@ -6,6 +6,7 @@ import BeaufortBold from '../../assets/fonts/BeaufortforLOLJa-Bold.ttf';
 import BeaufortRegular from '../../assets/fonts/BeaufortforLOLJa-Regular.ttf';
 import Univers55 from '../../assets/fonts/Univers55.ttf';
 import Univers59 from '../../assets/fonts/Univers59-UltraCondensed.ttf';
+import UniversRegular from '../../assets/fonts/UniversforRiotGames-Regular.ttf';
 
 interface CardCanvasProps {
   options: Options;
@@ -22,6 +23,7 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
     'Beaufort-Regular': BeaufortRegular,
     Univers55,
     Univers59,
+    UniversRegular,
   });
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -40,6 +42,29 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
     regeneration: [1, 1],
   };
 
+  const getLines = (
+    ctx: CanvasRenderingContext2D,
+    text: string,
+    maxWidth: number
+  ): string[] => {
+    const words = text.split(' ');
+    const lines = [];
+    let currentLine = words[0];
+
+    for (let i = 1; i < words.length; i += 1) {
+      const word = words[i];
+      const { width } = ctx.measureText(`${currentLine} ${word}`);
+      if (width < maxWidth) {
+        currentLine = `${currentLine} ${word}`;
+      } else {
+        lines.push(currentLine);
+        currentLine = word;
+      }
+    }
+    lines.push(currentLine);
+    return lines;
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
 
@@ -51,6 +76,7 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
         let count = 0;
         const finishLoading = (): void => {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
+          const description = getLines(ctx, options.description, 550);
 
           const xDiff = sprites[options.rarity];
 
@@ -165,33 +191,28 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
             canvas.width / 2,
             canvas.height - 315
           );
-          ctx.font = '70px Beaufort-Bold';
+          ctx.font = '72px Beaufort-Bold';
           ctx.strokeStyle = 'black';
           const powerX = 88;
-          const powerY = canvas.height - 88;
+          const powerY = canvas.height - 86;
           ctx.strokeText(`${options.power}`, powerX, powerY);
           ctx.fillText(`${options.power}`, powerX, powerY);
           const healthX = canvas.width - 88;
-          const healthY = canvas.height - 88;
+          const healthY = canvas.height - 86;
           ctx.strokeText(`${options.health}`, healthX, healthY);
           ctx.fillText(`${options.health}`, healthX, healthY);
-          ctx.font = '90px Beaufort-Bold';
-          const manaX = 88;
-          const manaY = 132;
+          ctx.font = '92px Beaufort-Bold';
+          const manaX = 90;
+          const manaY = 133;
           ctx.strokeText(`${options.mana}`, manaX, manaY);
           ctx.fillText(`${options.mana}`, manaX, manaY);
-          ctx.font = 'bold 32px Univers55';
+          ctx.font = 'bold 31.5px UniversRegular';
+          let yOffset = 184;
           ctx.fillStyle = descriptiveBlue;
-          ctx.strokeText(
-            options.description,
-            canvas.width / 2,
-            canvas.height - 184
-          );
-          ctx.fillText(
-            options.description,
-            canvas.width / 2,
-            canvas.height - 184
-          );
+          description.reverse().forEach((line) => {
+            ctx.fillText(line, canvas.width / 2, canvas.height - yOffset);
+            yOffset += 40;
+          });
         };
         Object.entries(options.images).forEach((entry) => {
           const [id, src] = entry;

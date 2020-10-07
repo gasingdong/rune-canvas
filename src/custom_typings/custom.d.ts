@@ -13,3 +13,8 @@ declare module '*.ttf' {
   const value: never;
   export default value;
 }
+
+declare module '*.otf' {
+  const value: never;
+  export default value;
+}
