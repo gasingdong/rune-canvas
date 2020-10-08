@@ -88,13 +88,15 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
       const { width } = ctx.measureText(`${currentLine}${character}`);
 
       if (width >= maxWidth && character === ' ') {
-        widths.push(ctx.measureText(currentLine).width);
+        widths.push(
+          ctx.measureText(currentLine).width - currentLine.length * 1.25
+        );
         currentLine = '';
       } else {
         currentLine = `${currentLine}${character}`;
       }
     }
-    widths.push(ctx.measureText(currentLine).width);
+    widths.push(ctx.measureText(currentLine).width - currentLine.length * 1.25);
     return widths;
   };
 
@@ -258,14 +260,14 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
           drawStrokedText(ctx, `${options.mana}`, 90, 133, costFont);
 
           if (options.description.length > 0) {
-            ctx.font = 'bold 33px UniversRegular';
+            ctx.font = 'bold 34px UniversRegular';
             ctx.fillStyle = descriptiveBlue;
             const characters = getCharacters(options.description);
-            const maxWidth = 450;
+            const maxWidth = 580;
             const widths = getLineWidths(ctx, options.description, maxWidth);
             let currentLine = '';
             let lineIndex = 0;
-            let yOffset = 185 + (widths.length - 1) * 39;
+            let yOffset = 184 + (widths.length - 1) * 39;
             let characterX = canvas.width / 2 - widths[0] / 2;
             characters.forEach((character) => {
               if (character === '#') {
@@ -279,12 +281,12 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
                   currentLine = '';
                   lineIndex += 1;
                   characterX = canvas.width / 2 - widths[lineIndex] / 2;
-                  yOffset -= 40;
+                  yOffset -= 39;
                 } else {
                   currentLine = `${currentLine}${character}`;
-                  characterX += ctx.measureText(character).width / 2;
+                  characterX += ctx.measureText(character).width / 2 - 0.625;
                   ctx.fillText(character, characterX, canvas.height - yOffset);
-                  characterX += ctx.measureText(character).width / 2;
+                  characterX += ctx.measureText(character).width / 2 - 0.625;
                 }
               }
             });
@@ -310,14 +312,7 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
   if (!loaded) {
     return <AppLoading />;
   }
-  return (
-    <canvas
-      ref={canvasRef}
-      width={680}
-      height={1024}
-      style={{ textRendering: 'optimizeLegibility' }}
-    />
-  );
+  return <canvas ref={canvasRef} width={680} height={1024} />;
 };
 
 export default CardCanvas;
