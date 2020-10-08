@@ -42,27 +42,76 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
     regeneration: [1, 1],
   };
 
-  const getLines = (
+  const getCharacters = (text: string, special = true): string[] => {
+    const letters = text.split('');
+    const result = [];
+
+    for (let i = 0; i < letters.length; i += 1) {
+      const letter = letters[i];
+
+      if (letter === '<') {
+        let temp = i + 1;
+        let command = '';
+
+        while (letters[temp] !== '>' && temp < letters.length) {
+          command += letters[temp];
+          temp += 1;
+        }
+
+        if (letters[temp] === '>') {
+          i = temp;
+
+          if (special) {
+            result.push(command);
+          }
+        } else {
+          result.push(letter);
+        }
+      } else {
+        result.push(letter);
+      }
+    }
+    return result;
+  };
+
+  const getLineWidths = (
     ctx: CanvasRenderingContext2D,
     text: string,
     maxWidth: number
-  ): string[] => {
-    const words = text.split(' ');
-    const lines = [];
-    let currentLine = words[0];
+  ): number[] => {
+    const widths = [];
+    const characters = getCharacters(text, false);
+    let currentLine = '';
 
-    for (let i = 1; i < words.length; i += 1) {
-      const word = words[i];
-      const { width } = ctx.measureText(`${currentLine} ${word}`);
-      if (width < maxWidth) {
-        currentLine = `${currentLine} ${word}`;
+    for (let i = 0; i < characters.length; i += 1) {
+      const character = characters[i];
+      const { width } = ctx.measureText(`${currentLine}${character}`);
+
+      if (width >= maxWidth && character === ' ') {
+        widths.push(ctx.measureText(currentLine).width);
+        currentLine = '';
       } else {
-        lines.push(currentLine);
-        currentLine = word;
+        currentLine = `${currentLine}${character}`;
       }
     }
-    lines.push(currentLine);
-    return lines;
+    widths.push(ctx.measureText(currentLine).width);
+    return widths;
+  };
+
+  const drawStrokedText = (
+    ctx: CanvasRenderingContext2D,
+    text: string,
+    x: number,
+    y: number,
+    font: string,
+    fillStyle = 'white',
+    strokeStyle = 'black'
+  ): void => {
+    ctx.font = font;
+    ctx.strokeStyle = strokeStyle;
+    ctx.strokeText(text, x, y);
+    ctx.fillStyle = fillStyle;
+    ctx.fillText(text, x, y);
   };
 
   useEffect(() => {
@@ -76,7 +125,6 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
         let count = 0;
         const finishLoading = (): void => {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-          const description = getLines(ctx, options.description, 550);
 
           const xDiff = sprites[options.rarity];
 
@@ -191,28 +239,56 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
             canvas.width / 2,
             canvas.height - 315
           );
-          ctx.font = '72px Beaufort-Bold';
-          ctx.strokeStyle = 'black';
-          const powerX = 88;
-          const powerY = canvas.height - 86;
-          ctx.strokeText(`${options.power}`, powerX, powerY);
-          ctx.fillText(`${options.power}`, powerX, powerY);
-          const healthX = canvas.width - 88;
-          const healthY = canvas.height - 86;
-          ctx.strokeText(`${options.health}`, healthX, healthY);
-          ctx.fillText(`${options.health}`, healthX, healthY);
-          ctx.font = '92px Beaufort-Bold';
-          const manaX = 90;
-          const manaY = 133;
-          ctx.strokeText(`${options.mana}`, manaX, manaY);
-          ctx.fillText(`${options.mana}`, manaX, manaY);
-          ctx.font = 'bold 31.5px UniversRegular';
-          let yOffset = 184;
-          ctx.fillStyle = descriptiveBlue;
-          description.reverse().forEach((line) => {
-            ctx.fillText(line, canvas.width / 2, canvas.height - yOffset);
-            yOffset += 40;
-          });
+          const powerFont = '72px Beaufort-Bold';
+          drawStrokedText(
+            ctx,
+            `${options.power}`,
+            88,
+            canvas.height - 86,
+            powerFont
+          );
+          drawStrokedText(
+            ctx,
+            `${options.health}`,
+            canvas.width - 88,
+            canvas.height - 86,
+            powerFont
+          );
+          const costFont = '92px Beaufort-Bold';
+          drawStrokedText(ctx, `${options.mana}`, 90, 133, costFont);
+
+          if (options.description.length > 0) {
+            ctx.font = 'bold 33px UniversRegular';
+            ctx.fillStyle = descriptiveBlue;
+            const characters = getCharacters(options.description);
+            const maxWidth = 450;
+            const widths = getLineWidths(ctx, options.description, maxWidth);
+            let currentLine = '';
+            let lineIndex = 0;
+            let yOffset = 185 + (widths.length - 1) * 39;
+            let characterX = canvas.width / 2 - widths[0] / 2;
+            characters.forEach((character) => {
+              if (character === '#') {
+                ctx.fillStyle = 'yellow';
+              } else if (character === '/#') {
+                ctx.fillStyle = descriptiveBlue;
+              } else {
+                const { width } = ctx.measureText(`${currentLine}${character}`);
+
+                if (width >= maxWidth && character === ' ') {
+                  currentLine = '';
+                  lineIndex += 1;
+                  characterX = canvas.width / 2 - widths[lineIndex] / 2;
+                  yOffset -= 40;
+                } else {
+                  currentLine = `${currentLine}${character}`;
+                  characterX += ctx.measureText(character).width / 2;
+                  ctx.fillText(character, characterX, canvas.height - yOffset);
+                  characterX += ctx.measureText(character).width / 2;
+                }
+              }
+            });
+          }
         };
         Object.entries(options.images).forEach((entry) => {
           const [id, src] = entry;
@@ -234,7 +310,14 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
   if (!loaded) {
     return <AppLoading />;
   }
-  return <canvas ref={canvasRef} width={680} height={1024} />;
+  return (
+    <canvas
+      ref={canvasRef}
+      width={680}
+      height={1024}
+      style={{ textRendering: 'optimizeLegibility' }}
+    />
+  );
 };
 
 export default CardCanvas;
