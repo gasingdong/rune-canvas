@@ -79,9 +79,13 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
     text: string,
     maxWidth: number
   ): number[] => {
-    const widths = [];
+    const widths: number[] = [];
     const characters = getCharacters(text, false);
     let currentLine = '';
+
+    if (characters.length === 0) {
+      return widths;
+    }
 
     for (let i = 0; i < characters.length; i += 1) {
       const character = characters[i];
@@ -89,14 +93,14 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
 
       if (width >= maxWidth && character === ' ') {
         widths.push(
-          ctx.measureText(currentLine).width - currentLine.length * 1.25
+          ctx.measureText(currentLine).width - currentLine.length * 1.3
         );
         currentLine = '';
       } else {
         currentLine = `${currentLine}${character}`;
       }
     }
-    widths.push(ctx.measureText(currentLine).width - currentLine.length * 1.25);
+    widths.push(ctx.measureText(currentLine).width - currentLine.length * 1.3);
     return widths;
   };
 
@@ -168,13 +172,80 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
             128 * 0.4,
             128 * 0.4
           );
+          ctx.fillStyle = 'white';
+          ctx.textAlign = 'center';
+          ctx.font = '48px Beaufort-Bold';
+          ctx.fillText(
+            `${options.name.toUpperCase()}`,
+            canvas.width / 2,
+            canvas.height - 315
+          );
+          const powerFont = '72px Beaufort-Bold';
+          drawStrokedText(
+            ctx,
+            `${options.power}`,
+            88,
+            canvas.height - 86,
+            powerFont
+          );
+          drawStrokedText(
+            ctx,
+            `${options.health}`,
+            canvas.width - 88,
+            canvas.height - 86,
+            powerFont
+          );
+          const costFont = '92px Beaufort-Bold';
+          drawStrokedText(ctx, `${options.mana}`, 90, 133, costFont);
+          let yOffset = 329;
+
+          if (options.description.length > 0) {
+            ctx.font = 'bold 34px UniversRegular';
+            ctx.fillStyle = descriptiveBlue;
+            const characters = getCharacters(options.description);
+            const maxWidth = 535;
+            const widths = getLineWidths(ctx, options.description, maxWidth);
+            let currentLine = '';
+            let lineIndex = 0;
+            let descriptionYOffset = yOffset - (widths.length - 1) * 39;
+            yOffset -= (widths.length - 1) * 39;
+            let characterX = canvas.width / 2 - widths[0] / 2;
+            characters.forEach((character) => {
+              if (character === '#') {
+                ctx.fillStyle = 'yellow';
+              } else if (character === '/#') {
+                ctx.fillStyle = descriptiveBlue;
+              } else {
+                const { width } = ctx.measureText(`${currentLine}${character}`);
+
+                if (width >= maxWidth && character === ' ') {
+                  currentLine = '';
+                  lineIndex += 1;
+                  characterX = canvas.width / 2 - widths[lineIndex] / 2;
+                  descriptionYOffset += 39;
+                } else {
+                  currentLine = `${currentLine}${character}`;
+                  characterX += ctx.measureText(character).width / 2 - 0.65;
+                  ctx.fillText(
+                    character,
+                    characterX,
+                    canvas.height / 2 + descriptionYOffset
+                  );
+                  characterX += ctx.measureText(character).width / 2 - 0.65;
+                }
+              }
+            });
+          }
           const numKeywords = options.keywords.size;
 
           if (numKeywords > 0) {
             ctx.fillStyle = gold;
             ctx.textAlign = 'center';
             ctx.font = '42px Beaufort-Bold';
-            const keywordY = canvas.height / 2 + 207;
+            const keywordY =
+              canvas.height / 2 +
+              yOffset -
+              (options.description.length > 0 ? 122 : 74);
             const keyword = options.keywords.keys().next().value.value;
             const keywordWidth =
               ctx.measureText(keyword.toUpperCase()).width + 50;
@@ -229,67 +300,9 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
               ctx.fillText(
                 `${keyword.toUpperCase()}`,
                 canvas.width / 2 + 32,
-                canvas.height - 249
+                keywordY + 56
               );
             }
-          }
-          ctx.fillStyle = 'white';
-          ctx.textAlign = 'center';
-          ctx.font = '48px Beaufort-Bold';
-          ctx.fillText(
-            `${options.name.toUpperCase()}`,
-            canvas.width / 2,
-            canvas.height - 315
-          );
-          const powerFont = '72px Beaufort-Bold';
-          drawStrokedText(
-            ctx,
-            `${options.power}`,
-            88,
-            canvas.height - 86,
-            powerFont
-          );
-          drawStrokedText(
-            ctx,
-            `${options.health}`,
-            canvas.width - 88,
-            canvas.height - 86,
-            powerFont
-          );
-          const costFont = '92px Beaufort-Bold';
-          drawStrokedText(ctx, `${options.mana}`, 90, 133, costFont);
-
-          if (options.description.length > 0) {
-            ctx.font = 'bold 34px UniversRegular';
-            ctx.fillStyle = descriptiveBlue;
-            const characters = getCharacters(options.description);
-            const maxWidth = 580;
-            const widths = getLineWidths(ctx, options.description, maxWidth);
-            let currentLine = '';
-            let lineIndex = 0;
-            let yOffset = 184 + (widths.length - 1) * 39;
-            let characterX = canvas.width / 2 - widths[0] / 2;
-            characters.forEach((character) => {
-              if (character === '#') {
-                ctx.fillStyle = 'yellow';
-              } else if (character === '/#') {
-                ctx.fillStyle = descriptiveBlue;
-              } else {
-                const { width } = ctx.measureText(`${currentLine}${character}`);
-
-                if (width >= maxWidth && character === ' ') {
-                  currentLine = '';
-                  lineIndex += 1;
-                  characterX = canvas.width / 2 - widths[lineIndex] / 2;
-                  yOffset -= 39;
-                } else {
-                  currentLine = `${currentLine}${character}`;
-                  characterX += ctx.measureText(character).width / 2 - 0.625;
-                  ctx.fillText(character, characterX, canvas.height - yOffset);
-                  characterX += ctx.measureText(character).width / 2 - 0.625;
-                }
-              }
-            });
           }
         };
         Object.entries(options.images).forEach((entry) => {
