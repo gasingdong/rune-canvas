@@ -13,7 +13,6 @@ interface CardCanvasProps {
 }
 
 const gold = '#f0cc70';
-const descriptiveBlue = '#e1eeec';
 
 const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
   const { options } = props;
@@ -40,68 +39,6 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
     tough: [2, 0],
     fleeting: [0, 1],
     regeneration: [1, 1],
-  };
-
-  const getCharacters = (text: string, special = true): string[] => {
-    const letters = text.split('');
-    const result = [];
-
-    for (let i = 0; i < letters.length; i += 1) {
-      const letter = letters[i];
-
-      if (letter === '<') {
-        let temp = i + 1;
-        let command = '';
-
-        while (letters[temp] !== '>' && temp < letters.length) {
-          command += letters[temp];
-          temp += 1;
-        }
-
-        if (letters[temp] === '>') {
-          i = temp;
-
-          if (special) {
-            result.push(command);
-          }
-        } else {
-          result.push(letter);
-        }
-      } else {
-        result.push(letter);
-      }
-    }
-    return result;
-  };
-
-  const getLineWidths = (
-    ctx: CanvasRenderingContext2D,
-    text: string,
-    maxWidth: number
-  ): number[] => {
-    const widths: number[] = [];
-    const characters = getCharacters(text, false);
-    let currentLine = '';
-
-    if (characters.length === 0) {
-      return widths;
-    }
-
-    for (let i = 0; i < characters.length; i += 1) {
-      const character = characters[i];
-      const { width } = ctx.measureText(`${currentLine}${character}`);
-
-      if (width >= maxWidth && character === ' ') {
-        widths.push(
-          ctx.measureText(currentLine).width - currentLine.length * 1.3
-        );
-        currentLine = '';
-      } else {
-        currentLine = `${currentLine}${character}`;
-      }
-    }
-    widths.push(ctx.measureText(currentLine).width - currentLine.length * 1.3);
-    return widths;
   };
 
   const drawStrokedText = (
@@ -200,41 +137,6 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
           let yOffset = 329;
 
           if (options.description.length > 0) {
-            ctx.font = 'bold 34px UniversRegular';
-            ctx.fillStyle = descriptiveBlue;
-            const characters = getCharacters(options.description);
-            const maxWidth = 535;
-            const widths = getLineWidths(ctx, options.description, maxWidth);
-            let currentLine = '';
-            let lineIndex = 0;
-            let descriptionYOffset = yOffset - (widths.length - 1) * 39;
-            yOffset -= (widths.length - 1) * 39;
-            let characterX = canvas.width / 2 - widths[0] / 2;
-            characters.forEach((character) => {
-              if (character === '#') {
-                ctx.fillStyle = 'yellow';
-              } else if (character === '/#') {
-                ctx.fillStyle = descriptiveBlue;
-              } else {
-                const { width } = ctx.measureText(`${currentLine}${character}`);
-
-                if (width >= maxWidth && character === ' ') {
-                  currentLine = '';
-                  lineIndex += 1;
-                  characterX = canvas.width / 2 - widths[lineIndex] / 2;
-                  descriptionYOffset += 39;
-                } else {
-                  currentLine = `${currentLine}${character}`;
-                  characterX += ctx.measureText(character).width / 2 - 0.65;
-                  ctx.fillText(
-                    character,
-                    characterX,
-                    canvas.height / 2 + descriptionYOffset
-                  );
-                  characterX += ctx.measureText(character).width / 2 - 0.65;
-                }
-              }
-            });
           }
           const numKeywords = options.keywords.size;
 
