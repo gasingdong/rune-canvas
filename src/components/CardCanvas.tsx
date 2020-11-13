@@ -32,8 +32,25 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
       const ctx = canvas.getContext('2d');
 
       if (ctx) {
-        const card = new Card(canvas, ctx, options);
-        card.draw();
+        const loadedImages: { [key: string]: HTMLImageElement } = {};
+        let count = 0;
+        const finishLoading = (): void => {
+          const card = new Card(canvas, ctx, options, loadedImages);
+          card.draw();
+        };
+        Object.entries(options.images).forEach((entry) => {
+          const [id, src] = entry;
+          const image = new Image();
+          image.onload = (): void => {
+            count += 1;
+
+            if (count === Object.keys(options.images).length) {
+              finishLoading();
+            }
+          };
+          image.src = src;
+          loadedImages[id] = image;
+        });
       }
     }
   }, [options, loaded]);
