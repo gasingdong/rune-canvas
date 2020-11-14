@@ -1,4 +1,5 @@
 import { Options } from './app-enums';
+import DescriptionBox from './description-box';
 
 class Card {
   static readonly SPRITES = {
@@ -8,15 +9,9 @@ class Card {
     none: 2040,
   };
 
-  static readonly GOLD = '#f0cc70';
+  static readonly STAT_WHITE = 'white';
 
-  static readonly KEYWORD_SPRITES: { [name: string]: number[] } = {
-    ephemeral: [0, 0],
-    fearsome: [1, 0],
-    tough: [2, 0],
-    fleeting: [0, 1],
-    regeneration: [1, 1],
-  };
+  static readonly BACKGROUND_COLOR = '#1c1c1c';
 
   private readonly canvas: HTMLCanvasElement;
 
@@ -25,6 +20,8 @@ class Card {
   private readonly options: Options;
 
   private readonly images: { [key: string]: HTMLImageElement };
+
+  private readonly descriptionBox: DescriptionBox;
 
   constructor(
     canvas: HTMLCanvasElement,
@@ -36,6 +33,7 @@ class Card {
     this.ctx = ctx;
     this.options = options;
     this.images = images;
+    this.descriptionBox = new DescriptionBox(canvas, ctx, options, images, 500);
   }
 
   drawStrokedText = (
@@ -73,7 +71,7 @@ class Card {
   };
 
   drawFrame = (): void => {
-    this.ctx.fillStyle = '#1c1c1c';
+    this.ctx.fillStyle = Card.BACKGROUND_COLOR;
     this.ctx.fillRect(20, 40, 640, 925);
     this.ctx.drawImage(
       this.images.frames,
@@ -102,19 +100,8 @@ class Card {
     );
   };
 
-  drawName = (): void => {
-    this.ctx.fillStyle = 'white';
-    this.ctx.textAlign = 'center';
-    this.ctx.font = '48px Beaufort-Bold';
-    this.ctx.fillText(
-      `${this.options.name.toUpperCase()}`,
-      this.canvas.width / 2,
-      this.canvas.height - 315
-    );
-  };
-
   drawPower = (): void => {
-    this.ctx.fillStyle = 'white';
+    this.ctx.fillStyle = Card.STAT_WHITE;
     this.ctx.textAlign = 'center';
     this.drawStrokedText(
       this.ctx,
@@ -126,7 +113,7 @@ class Card {
   };
 
   drawHealth = (): void => {
-    this.ctx.fillStyle = 'white';
+    this.ctx.fillStyle = Card.STAT_WHITE;
     this.ctx.textAlign = 'center';
     this.drawStrokedText(
       this.ctx,
@@ -138,7 +125,7 @@ class Card {
   };
 
   drawCost = (): void => {
-    this.ctx.fillStyle = 'white';
+    this.ctx.fillStyle = Card.STAT_WHITE;
     this.ctx.textAlign = 'center';
     this.drawStrokedText(
       this.ctx,
@@ -149,87 +136,15 @@ class Card {
     );
   };
 
-  drawKeywords = (): void => {
-    const numKeywords = this.options.keywords.size;
-
-    if (numKeywords > 0) {
-      this.ctx.fillStyle = Card.GOLD;
-      this.ctx.textAlign = 'center';
-      this.ctx.font = '42px Beaufort-Bold';
-      const keywordY =
-        this.canvas.height / 2 +
-        300 -
-        (this.options.description.length > 0 ? 122 : 74);
-      const keyword = this.options.keywords.keys().next().value.value;
-      const keywordWidth =
-        this.ctx.measureText(keyword.toUpperCase()).width + 50;
-      const keywordX = this.canvas.width / 2 - keywordWidth / 2;
-
-      if (numKeywords === 1 && keyword in Card.KEYWORD_SPRITES) {
-        const [spriteX, spriteY] = Card.KEYWORD_SPRITES[keyword];
-        this.ctx.drawImage(
-          this.images.keywordLeft,
-          0,
-          0,
-          20,
-          82,
-          keywordX - 20,
-          keywordY,
-          20,
-          82
-        );
-        this.ctx.drawImage(
-          this.images.keywordRight,
-          0,
-          0,
-          22,
-          82,
-          keywordX + keywordWidth - 1,
-          keywordY,
-          22,
-          82
-        );
-        this.ctx.drawImage(
-          this.images.keywordFill,
-          0,
-          0,
-          170,
-          82,
-          keywordX - 1,
-          keywordY,
-          keywordWidth + 1,
-          82
-        );
-        this.ctx.drawImage(
-          this.images.keywordIcons,
-          spriteX * 55,
-          spriteY * 55,
-          55,
-          55,
-          keywordX - 2,
-          keywordY + 13,
-          55,
-          55
-        );
-        this.ctx.fillText(
-          `${keyword.toUpperCase()}`,
-          this.canvas.width / 2 + 32,
-          keywordY + 56
-        );
-      }
-    }
-  };
-
   draw = (): void => {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawMain();
     this.drawFrame();
     this.drawRegion();
-    this.drawName();
     this.drawPower();
     this.drawHealth();
     this.drawCost();
-    this.drawKeywords();
+    this.descriptionBox.draw();
   };
 }
 
