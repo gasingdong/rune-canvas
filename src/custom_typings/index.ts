@@ -1,10 +1,10 @@
-import { Keyword, Rarity } from './card-enums';
-import Region from './region';
+import { Keyword, Rarity } from '../utilities/card-enums';
+import Region from '../utilities/region';
 
-export interface Options {
+export interface CardConfig {
   rarity: Rarity;
   region: Region;
-  images: Record<string, never | string>;
+  art: string;
   description: string;
   name: string;
   power: number;

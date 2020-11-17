@@ -3,15 +3,15 @@ import React, { Dispatch, ReactText, SetStateAction } from 'react';
 import { StyleSheet, Button, TextInput, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { OptionTypeBase, ValueType } from 'react-select';
-import { Options } from '../utilities/app-enums';
+import { CardConfig } from '../custom_typings';
 import { Rarity } from '../utilities/card-enums';
 import Region from '../utilities/region';
 import ControlledCounter from './ControlledCounter';
 import MultiPicker from './MultiPicker';
 
-interface CardSettingsProps {
-  options: Options;
-  setOptions: Dispatch<SetStateAction<Options>>;
+interface CardConfigurationProps {
+  config: CardConfig;
+  setConfig: Dispatch<SetStateAction<CardConfig>>;
 }
 
 const borderColor = '#1c1c1c';
@@ -20,10 +20,10 @@ const styles = StyleSheet.create({
   textBox: { borderColor, borderWidth: 1, height: 40 },
 });
 
-const CardSettings: React.FC<CardSettingsProps> = (
-  props: CardSettingsProps
+const CardConfiguration: React.FC<CardConfigurationProps> = (
+  props: CardConfigurationProps
 ) => {
-  const { options, setOptions } = props;
+  const { config, setConfig } = props;
 
   const updateRarity = (itemValue: ReactText): void => {
     const matching = Object.values(Rarity).filter(
@@ -31,8 +31,8 @@ const CardSettings: React.FC<CardSettingsProps> = (
     );
 
     if (matching.length > 0) {
-      setOptions({
-        ...options,
+      setConfig({
+        ...config,
         rarity: matching[0],
       });
     }
@@ -42,8 +42,8 @@ const CardSettings: React.FC<CardSettingsProps> = (
     const selectedRegion = Region.getRegion(itemValue.toString());
 
     if (selectedRegion) {
-      setOptions({
-        ...options,
+      setConfig({
+        ...config,
         region: selectedRegion,
       });
     }
@@ -55,81 +55,78 @@ const CardSettings: React.FC<CardSettingsProps> = (
     });
 
     if (!result.cancelled) {
-      setOptions({
-        ...options,
-        images: {
-          ...options.images,
-          content: result.uri,
-        },
+      setConfig({
+        ...config,
+        art: result.uri,
       });
     }
   };
 
   const updateName = (text: string): void => {
-    setOptions({
-      ...options,
+    setConfig({
+      ...config,
       name: text,
     });
   };
 
   const updateDescription = (text: string): void => {
-    setOptions({
-      ...options,
+    setConfig({
+      ...config,
       description: text,
     });
   };
 
   const increaseMana = (): void => {
-    setOptions({
-      ...options,
-      mana: options.mana + 1,
+    setConfig({
+      ...config,
+      mana: config.mana + 1,
     });
   };
 
   const decreaseMana = (): void => {
-    setOptions({
-      ...options,
-      mana: options.mana - 1,
+    setConfig({
+      ...config,
+      mana: config.mana - 1,
     });
   };
 
   const increasePower = (): void => {
-    setOptions({
-      ...options,
-      power: options.power + 1,
+    setConfig({
+      ...config,
+      power: config.power + 1,
     });
   };
 
   const decreasePower = (): void => {
-    setOptions({
-      ...options,
-      power: options.power - 1,
+    setConfig({
+      ...config,
+      power: config.power - 1,
     });
   };
 
   const increaseHealth = (): void => {
-    setOptions({
-      ...options,
-      health: options.health + 1,
+    setConfig({
+      ...config,
+      health: config.health + 1,
     });
   };
 
   const decreaseHealth = (): void => {
-    setOptions({
-      ...options,
-      health: options.health - 1,
+    setConfig({
+      ...config,
+      health: config.health - 1,
     });
   };
 
   const updateKeywords = (keywords: ValueType<OptionTypeBase>): void => {
     if (keywords && keywords.length <= 4) {
-      setOptions({
-        ...options,
+      setConfig({
+        ...config,
         keywords: new Set(keywords.map((element: OptionTypeBase) => element)),
       });
     } else if (!keywords) {
-      setOptions({
-        ...options,
+      setConfig({
+        ...config,
         keywords: new Set(),
       });
     }
@@ -137,7 +134,7 @@ const CardSettings: React.FC<CardSettingsProps> = (
 
   return (
     <View>
-      <Picker selectedValue={options.rarity} onValueChange={updateRarity}>
+      <Picker selectedValue={config.rarity} onValueChange={updateRarity}>
         {Object.values(Rarity).map((element) => (
           <Picker.Item
             key={element}
@@ -147,7 +144,7 @@ const CardSettings: React.FC<CardSettingsProps> = (
         ))}
       </Picker>
       <Picker
-        selectedValue={options.region.toString()}
+        selectedValue={config.region.toString()}
         onValueChange={updateRegion}
       >
         {Region.getRegions().map((element) => (
@@ -159,7 +156,7 @@ const CardSettings: React.FC<CardSettingsProps> = (
         ))}
       </Picker>
       <MultiPicker
-        values={Array.from(options.keywords)}
+        values={Array.from(config.keywords)}
         setValues={updateKeywords}
       />
       <Button title="Upload card image" onPress={pickCardImage} />
@@ -167,32 +164,32 @@ const CardSettings: React.FC<CardSettingsProps> = (
         title="Mana"
         decrement={decreaseMana}
         increment={increaseMana}
-        value={options.mana}
+        value={config.mana}
       />
       <ControlledCounter
         title="Power"
         decrement={decreasePower}
         increment={increasePower}
-        value={options.power}
+        value={config.power}
       />
       <ControlledCounter
         title="Health"
         decrement={decreaseHealth}
         increment={increaseHealth}
-        value={options.health}
+        value={config.health}
       />
       <TextInput
         style={styles.textBox}
-        value={options.name}
+        value={config.name}
         onChangeText={updateName}
       />
       <TextInput
         style={styles.textBox}
-        value={options.description}
+        value={config.description}
         onChangeText={updateDescription}
       />
     </View>
   );
 };
 
-export default CardSettings;
+export default CardConfiguration;

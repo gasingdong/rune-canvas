@@ -1,4 +1,4 @@
-import { Options } from './app-enums';
+import { CardConfig } from '../custom_typings';
 import { Keyword } from './card-enums';
 
 class DescriptionBox {
@@ -39,7 +39,7 @@ class DescriptionBox {
   constructor(
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D,
-    options: Options,
+    config: CardConfig,
     images: { [key: string]: HTMLImageElement },
     maxWidth: number,
     spaceBroken = true,
@@ -47,9 +47,9 @@ class DescriptionBox {
   ) {
     this.canvas = canvas;
     this.ctx = ctx;
-    this.name = options.name;
-    this.keywords = options.keywords;
-    this.description = options.description;
+    this.name = config.name;
+    this.keywords = config.keywords;
+    this.description = config.description;
     this.maxWidth = maxWidth;
     this.spaceBroken = spaceBroken;
     this.spacing = spacing;

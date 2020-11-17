@@ -1,4 +1,4 @@
-import { Options } from './app-enums';
+import { CardConfig } from '../custom_typings';
 import DescriptionBox from './description-box';
 
 class Card {
@@ -17,7 +17,7 @@ class Card {
 
   private readonly ctx: CanvasRenderingContext2D;
 
-  private readonly options: Options;
+  private readonly settings: CardConfig;
 
   private readonly images: { [key: string]: HTMLImageElement };
 
@@ -26,12 +26,12 @@ class Card {
   constructor(
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D,
-    options: Options,
+    options: CardConfig,
     images: { [key: string]: HTMLImageElement }
   ) {
     this.canvas = canvas;
     this.ctx = ctx;
-    this.options = options;
+    this.settings = options;
     this.images = images;
     this.descriptionBox = new DescriptionBox(canvas, ctx, options, images, 500);
   }
@@ -75,7 +75,7 @@ class Card {
     this.ctx.fillRect(20, 40, 640, 925);
     this.ctx.drawImage(
       this.images.frames,
-      Card.SPRITES[this.options.rarity],
+      Card.SPRITES[this.settings.rarity],
       0,
       680,
       this.images.frames.height,
@@ -89,8 +89,8 @@ class Card {
   drawRegion = (): void => {
     this.ctx.drawImage(
       this.images.regions,
-      this.options.region.position[0],
-      this.options.region.position[1],
+      this.settings.region.position[0],
+      this.settings.region.position[1],
       128,
       128,
       132,
@@ -105,7 +105,7 @@ class Card {
     this.ctx.textAlign = 'center';
     this.drawStrokedText(
       this.ctx,
-      `${this.options.power}`,
+      `${this.settings.power}`,
       88,
       this.canvas.height - 86,
       '72px Beaufort-Bold'
@@ -117,7 +117,7 @@ class Card {
     this.ctx.textAlign = 'center';
     this.drawStrokedText(
       this.ctx,
-      `${this.options.health}`,
+      `${this.settings.health}`,
       this.canvas.width - 88,
       this.canvas.height - 86,
       '72px Beaufort-Bold'
@@ -129,7 +129,7 @@ class Card {
     this.ctx.textAlign = 'center';
     this.drawStrokedText(
       this.ctx,
-      `${this.options.mana}`,
+      `${this.settings.mana}`,
       90,
       133,
       '92px Beaufort-Bold'

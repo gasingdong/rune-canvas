@@ -1,20 +1,22 @@
 import { useFonts } from 'expo-font';
 import React, { useEffect, useRef, useState } from 'react';
 import { AppLoading } from 'expo';
-import { Options } from '../utilities/app-enums';
+import { CardConfig } from '../custom_typings';
 import BeaufortBold from '../../assets/fonts/BeaufortforLOLJa-Bold.ttf';
 import BeaufortRegular from '../../assets/fonts/BeaufortforLOLJa-Regular.ttf';
 import Univers55 from '../../assets/fonts/Univers55.ttf';
 import Univers59 from '../../assets/fonts/Univers59-UltraCondensed.ttf';
 import UniversRegular from '../../assets/fonts/UniversforRiotGames-Regular.ttf';
+import frames from '../../assets/frames.png';
+import regions from '../../assets/regions.png';
 import Card from '../utilities/card';
 
 interface CardCanvasProps {
-  options: Options;
+  config: CardConfig;
 }
 
 const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
-  const { options } = props;
+  const { config } = props;
   const [finishedLoading, setFinishedLoading] = useState(false);
   const [loaded, error] = useFonts({
     'Beaufort-Bold': BeaufortBold,
@@ -24,6 +26,11 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
     UniversRegular,
   });
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const images = {
+    frames,
+    regions,
+    art: config.art,
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -35,16 +42,16 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
         const loadedImages: { [key: string]: HTMLImageElement } = {};
         let count = 0;
         const finishLoading = (): void => {
-          const card = new Card(canvas, ctx, options, loadedImages);
+          const card = new Card(canvas, ctx, config, loadedImages);
           card.draw();
         };
-        Object.entries(options.images).forEach((entry) => {
+        Object.entries(images).forEach((entry) => {
           const [id, src] = entry;
           const image = new Image();
           image.onload = (): void => {
             count += 1;
 
-            if (count === Object.keys(options.images).length) {
+            if (count === Object.keys(images).length) {
               finishLoading();
             }
           };
@@ -53,7 +60,7 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
         });
       }
     }
-  }, [options, loaded]);
+  }, [config, loaded]);
 
   if (!loaded) {
     return <AppLoading />;
