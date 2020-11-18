@@ -31,6 +31,14 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
     regions,
   };
 
+  const loadFonts = (ctx: CanvasRenderingContext2D) => {
+    ctx.font = '0px Beaufort-Bold';
+    ctx.font = '0px Beaufort-Regular';
+    ctx.font = '0px Univers55';
+    ctx.font = '0px Univers59';
+    ctx.font = '0px UniversRegular';
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
 
@@ -41,6 +49,7 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
         const loadedImages: { [key: string]: HTMLImageElement } = {};
         let count = 0;
         const finishLoading = (): void => {
+          loadFonts(ctx);
           const card = new Card(canvas, ctx, config, loadedImages);
           card.draw();
         };
