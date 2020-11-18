@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-  View,
-  TouchableOpacity,
-  Text,
   GestureResponderEvent,
   StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 

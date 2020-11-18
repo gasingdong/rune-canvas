@@ -1,6 +1,6 @@
 import { Picker } from '@react-native-community/picker';
 import React, { Dispatch, ReactText, SetStateAction } from 'react';
-import { StyleSheet, Button, TextInput, View } from 'react-native';
+import { Button, StyleSheet, TextInput, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { OptionTypeBase, ValueType } from 'react-select';
 import { CardConfig } from '../custom_typings';

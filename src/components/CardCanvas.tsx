@@ -29,7 +29,6 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
   const images = {
     frames,
     regions,
-    art: config.art,
   };
 
   useEffect(() => {
