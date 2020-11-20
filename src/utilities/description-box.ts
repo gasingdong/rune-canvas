@@ -140,10 +140,11 @@ class DescriptionBox {
   draw = (): void => {
     this.ctx.font = 'bold 34px UniversRegular';
     this.ctx.fillStyle = DescriptionBox.DESCRIPTION_WHITE;
+    this.ctx.textAlign = 'center';
     let currentLine = '';
     let lineIndex = 0;
     let descriptionYOffset = 0;
-    let characterX = this.canvas.width / 2 - this.lineWidths[lineIndex] / 2;
+    let characterX = 0;
     this.parsed.forEach((word) => {
       if (word === '<#>') {
         this.ctx.fillStyle = 'yellow';
@@ -158,94 +159,83 @@ class DescriptionBox {
         if (width >= this.maxWidth) {
           currentLine = '';
           lineIndex += 1;
-          characterX = this.canvas.width / 2 - this.lineWidths[lineIndex] / 2;
+          characterX = 0;
           descriptionYOffset += 39;
         } else {
           currentLine = newLine;
-          characterX += this.ctx.measureText(word).width / 2 - 0.65;
+          const currentWord =
+            this.spaceBroken && word !== '.' ? ` ${word}` : word;
+          characterX += this.ctx.measureText(currentWord).width / 2 - 0.65;
           this.ctx.fillText(
-            word,
+            currentWord,
             characterX,
             this.canvas.height / 2 + descriptionYOffset
           );
-          characterX += this.ctx.measureText(word).width / 2 - 0.65;
+          characterX += this.ctx.measureText(currentWord).width / 2 - 0.65;
         }
       }
     });
   };
 
+  private calcLineWidths = (): void => {
+    const lines = [];
+    let index = 0;
+
+    while (index < this.parsed.length) {
+      const text = this.parsed[index];
+      let newLine = text;
+
+      if (this.spaceBroken) {
+        index += 1;
+
+        while (this.parsed[index] !== ' ' && index < this.parsed.length) {
+          newLine += this.parsed[index];
+          index += 1;
+        }
+      }
+      lines.push(newLine);
+      index += 1;
+    }
+
+    console.log(lines);
+  };
+
   private parse = (): void => {
     const characters = this.description.split('');
     const parsed = [];
-    const lineWidths = [];
 
-    let currentWord = '';
+    let text = '';
+    let index = 0;
 
-    for (let i = 0; i < characters.length; i += 1) {
-      const character = characters[i];
+    while (index < characters.length) {
+      const character = characters[index];
 
       if (character === '<') {
-        let temp = i + 1;
         let command = '';
+        index += 1;
 
-        if (currentWord.length > 0) {
-          parsed.push(currentWord);
-          currentWord = '';
+        if (text.length > 0) {
+          parsed.push(text);
+          text = '';
         }
 
-        while (characters[temp] !== '>' && temp < characters.length) {
-          command += characters[temp];
-          temp += 1;
+        while (characters[index] !== '>' && index < characters.length) {
+          command += characters[index];
+          index += 1;
         }
 
-        if (characters[temp] === '>') {
-          i = temp;
+        if (characters[index] === '>') {
           parsed.push(`<${command}>`);
         } else {
           parsed.push(character);
         }
-      } else if (this.spaceBroken) {
-        if (character === ' ') {
-          if (currentWord.length !== 0) {
-            parsed.push(currentWord);
-            currentWord = '';
-          }
-        } else {
-          currentWord = `${currentWord}${character}`;
-        }
       } else {
         parsed.push(character);
       }
+      index += 1;
     }
-
-    if (currentWord.length > 0) {
-      parsed.push(currentWord);
-    }
-
-    let currentLine = '';
-
-    for (let i = 0; i < parsed.length; i += 1) {
-      const word = parsed[i];
-      const newLine = this.spaceBroken
-        ? `${currentLine} ${word}`
-        : `${currentLine}${word}`;
-      let { width } = this.ctx.measureText(newLine);
-      width *= this.spacing;
-
-      if (width >= this.maxWidth) {
-        lineWidths.push(
-          this.ctx.measureText(currentLine).width - currentLine.length
-        );
-        currentLine = '';
-      } else {
-        currentLine = newLine;
-      }
-    }
-    lineWidths.push(
-      this.ctx.measureText(currentLine).width - currentLine.length
-    );
     this.parsed = parsed;
-    this.lineWidths = lineWidths;
+    this.calcLineWidths();
   };
 }
 export default DescriptionBox;
