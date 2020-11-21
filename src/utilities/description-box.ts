@@ -186,10 +186,11 @@ class DescriptionBox {
       let newLine = text;
 
       if (this.spaceBroken) {
-        index += 1;
-
-        while (this.parsed[index] !== ' ' && index < this.parsed.length) {
-          newLine += this.parsed[index];
+        while (
+          index < this.parsed.length - 1 &&
+          this.parsed[index + 1] !== ' '
+        ) {
+          newLine += this.parsed[index + 1];
           index += 1;
         }
       }
@@ -197,6 +198,7 @@ class DescriptionBox {
       index += 1;
     }
 
+    console.log(this.parsed);
     console.log(lines);
   };
 
