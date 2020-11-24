@@ -143,63 +143,76 @@ class DescriptionBox {
     this.ctx.textAlign = 'center';
     let currentLine = '';
     let lineIndex = 0;
-    let descriptionYOffset = 0;
-    let characterX = 0;
+    let descriptionYOffset = 328;
+    let characterX = this.canvas.width / 2 - this.lineWidths[lineIndex] / 2;
     this.parsed.forEach((word) => {
       if (word === '<#>') {
         this.ctx.fillStyle = 'yellow';
       } else if (word === '</#>') {
         this.ctx.fillStyle = DescriptionBox.DESCRIPTION_WHITE;
       } else {
-        const newLine = this.spaceBroken
-          ? `${currentLine} ${word}`
-          : `${currentLine}${word}`;
+        const newLine = `${currentLine}${word}`;
         const { width } = this.ctx.measureText(newLine);
 
-        if (width >= this.maxWidth) {
+        if (width > this.lineWidths[lineIndex]) {
           currentLine = '';
           lineIndex += 1;
-          characterX = 0;
+          characterX = this.canvas.width / 2 - this.lineWidths[lineIndex] / 2;
           descriptionYOffset += 39;
         } else {
           currentLine = newLine;
-          const currentWord =
-            this.spaceBroken && word !== '.' ? ` ${word}` : word;
-          characterX += this.ctx.measureText(currentWord).width / 2 - 0.65;
+          const currentWord = word;
+          characterX += this.ctx.measureText(currentWord).width / 2;
           this.ctx.fillText(
             currentWord,
             characterX,
             this.canvas.height / 2 + descriptionYOffset
           );
-          characterX += this.ctx.measureText(currentWord).width / 2 - 0.65;
+          characterX += this.ctx.measureText(currentWord).width / 2;
         }
       }
     });
   };
 
   private calcLineWidths = (): void => {
-    const lines = [];
+    const words = [];
     let index = 0;
 
     while (index < this.parsed.length) {
-      const text = this.parsed[index];
-      let newLine = text;
+      let word = this.parsed[index];
 
       if (this.spaceBroken) {
         while (
           index < this.parsed.length - 1 &&
           this.parsed[index + 1] !== ' '
         ) {
-          newLine += this.parsed[index + 1];
+          word += this.parsed[index + 1];
           index += 1;
         }
       }
-      lines.push(newLine);
+      words.push(word);
       index += 1;
     }
 
-    console.log(this.parsed);
-    console.log(lines);
+    const lineWidths: number[] = [];
+    let line = '';
+    this.ctx.font = 'bold 34px UniversRegular';
+
+    words.forEach((word) => {
+      const { width } = this.ctx.measureText(line + word);
+
+      if (width > this.maxWidth) {
+        lineWidths.push(this.ctx.measureText(line).width);
+        line = word;
+      } else {
+        line += word;
+      }
+    });
+
+    if (line.length !== 0) {
+      lineWidths.push(this.ctx.measureText(line).width);
+    }
+    this.lineWidths = lineWidths;
   };
 
   private parse = (): void => {
