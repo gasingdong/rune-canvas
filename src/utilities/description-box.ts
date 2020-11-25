@@ -143,8 +143,9 @@ class DescriptionBox {
     this.ctx.textAlign = 'center';
     let currentLine = '';
     let lineIndex = 0;
-    let descriptionYOffset = 328;
+    let descriptionYOffset = 328 - (this.lineWidths.length - 1) * 39;
     let characterX = this.canvas.width / 2 - this.lineWidths[lineIndex] / 2;
+    console.log(this.parsed);
     this.parsed.forEach((word) => {
       if (word === '<#>') {
         this.ctx.fillStyle = 'yellow';
@@ -152,23 +153,31 @@ class DescriptionBox {
         this.ctx.fillStyle = DescriptionBox.DESCRIPTION_WHITE;
       } else {
         const newLine = `${currentLine}${word}`;
-        const { width } = this.ctx.measureText(newLine);
+        const width =
+          this.ctx.measureText(newLine).width - newLine.length * 1.35;
 
         if (width > this.lineWidths[lineIndex]) {
-          currentLine = '';
+          currentLine = word;
           lineIndex += 1;
           characterX = this.canvas.width / 2 - this.lineWidths[lineIndex] / 2;
           descriptionYOffset += 39;
+          characterX += this.ctx.measureText(' ').width / 2 - 0.675;
+          this.ctx.fillText(
+            ' ',
+            characterX,
+            this.canvas.height / 2 + descriptionYOffset
+          );
+          characterX += this.ctx.measureText(' ').width / 2 - 0.675;
         } else {
           currentLine = newLine;
           const currentWord = word;
-          characterX += this.ctx.measureText(currentWord).width / 2;
+          characterX += this.ctx.measureText(currentWord).width / 2 - 0.675;
           this.ctx.fillText(
             currentWord,
             characterX,
             this.canvas.height / 2 + descriptionYOffset
           );
-          characterX += this.ctx.measureText(currentWord).width / 2;
+          characterX += this.ctx.measureText(currentWord).width / 2 - 0.675;
         }
       }
     });
@@ -202,7 +211,7 @@ class DescriptionBox {
       const { width } = this.ctx.measureText(line + word);
 
       if (width > this.maxWidth) {
-        lineWidths.push(this.ctx.measureText(line).width);
+        lineWidths.push(this.ctx.measureText(line).width - line.length * 1.35);
         line = word;
       } else {
         line += word;
@@ -210,7 +219,7 @@ class DescriptionBox {
     });
 
     if (line.length !== 0) {
-      lineWidths.push(this.ctx.measureText(line).width);
+      lineWidths.push(this.ctx.measureText(line).width - line.length * 1.35);
     }
     this.lineWidths = lineWidths;
   };
