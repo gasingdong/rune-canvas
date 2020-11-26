@@ -33,7 +33,7 @@ class Card {
     this.ctx = ctx;
     this.settings = options;
     this.images = images;
-    this.descriptionBox = new DescriptionBox(canvas, ctx, options, images, 580);
+    this.descriptionBox = new DescriptionBox(canvas, ctx, options, images, 610);
   }
 
   drawStrokedText = (

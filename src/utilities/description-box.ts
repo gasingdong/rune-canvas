@@ -147,6 +147,7 @@ class DescriptionBox {
     let characterX = this.canvas.width / 2 - this.lineWidths[lineIndex] / 2;
     console.log(this.parsed);
     this.parsed.forEach((word) => {
+      console.log(currentLine);
       if (word === '<#>') {
         this.ctx.fillStyle = 'yellow';
       } else if (word === '</#>') {
@@ -159,15 +160,9 @@ class DescriptionBox {
         if (width > this.lineWidths[lineIndex]) {
           currentLine = word;
           lineIndex += 1;
-          characterX = this.canvas.width / 2 - this.lineWidths[lineIndex] / 2;
+          characterX =
+            this.canvas.width / 2 - this.lineWidths[lineIndex] / 2 + 4;
           descriptionYOffset += 39;
-          characterX += this.ctx.measureText(' ').width / 2 - 0.675;
-          this.ctx.fillText(
-            ' ',
-            characterX,
-            this.canvas.height / 2 + descriptionYOffset
-          );
-          characterX += this.ctx.measureText(' ').width / 2 - 0.675;
         } else {
           currentLine = newLine;
           const currentWord = word;
