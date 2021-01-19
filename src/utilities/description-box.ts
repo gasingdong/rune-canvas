@@ -14,6 +14,10 @@ class DescriptionBox {
     regeneration: [1, 1],
   };
 
+  static readonly DEFAULT_NAME_VERTICAL_OFFSET = 238;
+
+  static readonly VERTICAL_OFFSET_PER_LINE = 20;
+
   private canvas: HTMLCanvasElement;
 
   private ctx: CanvasRenderingContext2D;
@@ -27,6 +31,8 @@ class DescriptionBox {
   private keywords: Set<Keyword>;
 
   private name: string;
+
+  private nameVerticalOffset: number;
 
   private parsed: string[] = [];
 
@@ -48,6 +54,7 @@ class DescriptionBox {
     this.canvas = canvas;
     this.ctx = ctx;
     this.name = config.name;
+    this.nameVerticalOffset = DescriptionBox.DEFAULT_NAME_VERTICAL_OFFSET;
     this.keywords = config.keywords;
     this.description = config.description;
     this.maxWidth = maxWidth;
@@ -60,11 +67,11 @@ class DescriptionBox {
   drawName = (): void => {
     this.ctx.fillStyle = 'white';
     this.ctx.textAlign = 'center';
-    this.ctx.font = '48px Beaufort-Bold';
+    this.ctx.font = '46px Beaufort-Bold';
     this.ctx.fillText(
       `${this.name.toUpperCase()}`,
       this.canvas.width / 2,
-      this.canvas.height - 315
+      this.canvas.height - this.nameVerticalOffset
     );
   };
 
@@ -160,6 +167,7 @@ class DescriptionBox {
         if (width > this.lineWidths[lineIndex]) {
           currentLine = word;
           lineIndex += 1;
+          this.nameVerticalOffset += DescriptionBox.VERTICAL_OFFSET_PER_LINE;
           characterX =
             this.canvas.width / 2 - this.lineWidths[lineIndex] / 2 + 4;
           descriptionYOffset += 39;
@@ -176,6 +184,7 @@ class DescriptionBox {
         }
       }
     });
+    this.drawName();
   };
 
   private calcLineWidths = (): void => {
@@ -257,4 +266,5 @@ class DescriptionBox {
     this.calcLineWidths();
   };
 }
+
 export default DescriptionBox;
