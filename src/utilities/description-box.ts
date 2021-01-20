@@ -14,7 +14,7 @@ class DescriptionBox {
     regeneration: [1, 1],
   };
 
-  static readonly DEFAULT_NAME_VERTICAL_OFFSET = 238;
+  static readonly DEFAULT_NAME_VERTICAL_OFFSET = 193;
 
   static readonly VERTICAL_OFFSET_PER_LINE = 20;
 
@@ -67,12 +67,24 @@ class DescriptionBox {
   drawName = (): void => {
     this.ctx.fillStyle = 'white';
     this.ctx.textAlign = 'center';
-    this.ctx.font = '46px Beaufort-Bold';
-    this.ctx.fillText(
-      `${this.name.toUpperCase()}`,
-      this.canvas.width / 2,
-      this.canvas.height - this.nameVerticalOffset
-    );
+    this.ctx.font = '57px Beaufort-Bold';
+    this.name = this.name.toUpperCase();
+    const parsedName = this.name.split('');
+    const characterSpacing = 1.07;
+    let characterX =
+      this.canvas.width / 2 -
+      (this.ctx.measureText(this.name).width * characterSpacing) / 2;
+    parsedName.forEach((character, index) => {
+      characterX +=
+        (this.ctx.measureText(character).width * characterSpacing) / 2;
+      this.ctx.fillText(
+        character,
+        characterX,
+        this.canvas.height - this.nameVerticalOffset
+      );
+      characterX +=
+        (this.ctx.measureText(character).width * characterSpacing) / 2;
+    });
   };
 
   drawKeywords = (): void => {
@@ -153,6 +165,10 @@ class DescriptionBox {
     let descriptionYOffset = 328 - (this.lineWidths.length - 1) * 39;
     let characterX = this.canvas.width / 2 - this.lineWidths[lineIndex] / 2;
     console.log(this.parsed);
+
+    if (this.parsed.length !== 0) {
+      this.nameVerticalOffset += DescriptionBox.VERTICAL_OFFSET_PER_LINE;
+    }
     this.parsed.forEach((word) => {
       console.log(currentLine);
       if (word === '<#>') {
