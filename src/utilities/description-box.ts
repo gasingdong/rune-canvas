@@ -16,7 +16,7 @@ class DescriptionBox {
 
   static readonly DEFAULT_NAME_VERTICAL_OFFSET = 193;
 
-  static readonly VERTICAL_OFFSET_PER_LINE = 20;
+  static readonly VERTICAL_OFFSET_PER_LINE = 45;
 
   private canvas: HTMLCanvasElement;
 
@@ -67,13 +67,18 @@ class DescriptionBox {
   drawName = (): void => {
     this.ctx.fillStyle = 'white';
     this.ctx.textAlign = 'center';
-    this.ctx.font = '57px Beaufort-Bold';
+    let fontSize = 57;
+    this.ctx.font = `${fontSize}px Beaufort-Bold`;
     this.name = this.name.toUpperCase();
     const parsedName = this.name.split('');
     const characterSpacing = 1.07;
-    let characterX =
-      this.canvas.width / 2 -
-      (this.ctx.measureText(this.name).width * characterSpacing) / 2;
+
+    while (this.ctx.measureText(this.name).width * characterSpacing > 560) {
+      fontSize -= 1;
+      this.ctx.font = `${fontSize}px Beaufort-Bold`;
+    }
+    const nameWidth = this.ctx.measureText(this.name).width * characterSpacing;
+    let characterX = this.canvas.width / 2 - nameWidth / 2;
     parsedName.forEach((character, index) => {
       characterX +=
         (this.ctx.measureText(character).width * characterSpacing) / 2;
