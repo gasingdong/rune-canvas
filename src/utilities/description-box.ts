@@ -16,7 +16,7 @@ class DescriptionBox {
 
   static readonly DEFAULT_NAME_VERTICAL_OFFSET = 193;
 
-  static readonly VERTICAL_OFFSET_PER_LINE = 45;
+  static readonly VERTICAL_OFFSET_PER_LINE = 38;
 
   private canvas: HTMLCanvasElement;
 
@@ -65,31 +65,25 @@ class DescriptionBox {
   }
 
   drawName = (): void => {
+    if (this.name.length === 0) {
+      return;
+    }
     this.ctx.fillStyle = 'white';
     this.ctx.textAlign = 'center';
     let fontSize = 57;
     this.ctx.font = `${fontSize}px Beaufort-Bold`;
     this.name = this.name.toUpperCase();
-    const parsedName = this.name.split('');
-    const characterSpacing = 1.07;
+    const characterSpacing = 1.06;
 
-    while (this.ctx.measureText(this.name).width * characterSpacing > 560) {
+    while (this.ctx.measureText(this.name).width * characterSpacing > 550) {
       fontSize -= 1;
       this.ctx.font = `${fontSize}px Beaufort-Bold`;
     }
-    const nameWidth = this.ctx.measureText(this.name).width * characterSpacing;
-    let characterX = this.canvas.width / 2 - nameWidth / 2;
-    parsedName.forEach((character, index) => {
-      characterX +=
-        (this.ctx.measureText(character).width * characterSpacing) / 2;
-      this.ctx.fillText(
-        character,
-        characterX,
-        this.canvas.height - this.nameVerticalOffset
-      );
-      characterX +=
-        (this.ctx.measureText(character).width * characterSpacing) / 2;
-    });
+    this.ctx.fillText(
+      this.name,
+      this.canvas.width / 2,
+      this.canvas.height - this.nameVerticalOffset
+    );
   };
 
   drawKeywords = (): void => {
@@ -172,7 +166,7 @@ class DescriptionBox {
     console.log(this.parsed);
 
     if (this.parsed.length !== 0) {
-      this.nameVerticalOffset += DescriptionBox.VERTICAL_OFFSET_PER_LINE;
+      this.nameVerticalOffset += 47;
     }
     this.parsed.forEach((word) => {
       console.log(currentLine);
