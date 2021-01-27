@@ -10,6 +10,7 @@ import UniversRegular from '../../assets/fonts/UniversforRiotGames-Regular.ttf';
 import frames from '../../assets/frames.png';
 import regions from '../../assets/regions.png';
 import Card from '../utilities/card';
+import css from '../stylesheet';
 
 interface CardCanvasProps {
   config: CardConfig;
@@ -26,31 +27,79 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
     UniversRegular,
   });
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const descriptionRef = useRef<HTMLDivElement>(null);
   const images = {
     frames,
     regions,
   };
 
-  const loadFonts = (ctx: CanvasRenderingContext2D) => {
-    ctx.font = '0px Beaufort-Bold';
-    ctx.font = '0px Beaufort-Regular';
-    ctx.font = '0px Univers55';
-    ctx.font = '0px Univers59';
-    ctx.font = '0px UniversRegular';
+  const loadFonts = (ctx: CanvasRenderingContext2D): void => {
+    ctx.font = '1px Beaufort-Bold';
+    ctx.font = '1px Beaufort-Regular';
+    ctx.font = '1px Univers55';
+    ctx.font = '1px Univers59';
+    ctx.font = '1px UniversRegular';
+  };
+
+  const htmlToXml = (html: string): string => {
+    const doc = document.implementation.createHTMLDocument('');
+    doc.write(html);
+
+    if (doc.documentElement.namespaceURI != null) {
+      doc.documentElement.setAttribute(
+        'xmlns',
+        doc.documentElement.namespaceURI
+      );
+    }
+    return new XMLSerializer().serializeToString(doc.body);
+  };
+
+  const renderHtmlToCanvas = (
+    html: string,
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ): void => {
+    let xml = htmlToXml(html);
+    xml = xml.replace(/#/g, '%23');
+    const data = `${
+      'data:image/svg+xml;charset=utf-8,' +
+      `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">` +
+      `${css}<foreignObject width="100%" height="100%">${xml}</foreignObject>` +
+      `</svg>`
+    }`;
+
+    const img = new Image();
+    console.log(data);
+    img.onload = (): void => {
+      ctx.drawImage(img, x, y);
+    };
+    img.src = data;
   };
 
   useEffect(() => {
     const canvas = canvasRef.current;
 
-    if (canvas) {
+    if (canvas && loaded) {
       const ctx = canvas.getContext('2d');
 
       if (ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         const loadedImages: { [key: string]: HTMLImageElement } = {};
         let count = 0;
         const finishLoading = (): void => {
           loadFonts(ctx);
           const card = new Card(canvas, ctx, config, loadedImages);
+          renderHtmlToCanvas(
+            config.description,
+            ctx,
+            38,
+            canvas.height / 2 + 289,
+            600,
+            500
+          );
           card.draw();
         };
         Object.entries(images).forEach((entry) => {
@@ -73,7 +122,11 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
   if (!loaded) {
     return <AppLoading />;
   }
-  return <canvas ref={canvasRef} width={680} height={1024} />;
+  return (
+    <>
+      <canvas ref={canvasRef} width={680} height={1024} />
+    </>
+  );
 };
 
 export default CardCanvas;

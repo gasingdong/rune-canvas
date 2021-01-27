@@ -86,6 +86,33 @@ class DescriptionBox {
     );
   };
 
+  // fillSpacedText = (
+  //   text: string,
+  //   x: number,
+  //   y: number,
+  //   spacing: number
+  // ): void => {
+  //   let wAll = this.ctx.measureText(text).width;
+  //   let characterX = x;
+  //   let currentText = text;
+  //
+  //   do {
+  //     const char = currentText.substr(0, 1);
+  //     currentText = currentText.substr(1);
+  //
+  //     this.ctx.fillText(char, characterX, y);
+  //     let wShorter;
+  //
+  //     if (currentText === '') {
+  //       wShorter = 0;
+  //     } else {
+  //       wShorter = this.ctx.measureText(currentText).width;
+  //     }
+  //     characterX += wAll - wShorter + spacing;
+  //     wAll = wShorter;
+  //   } while (currentText !== '');
+  // };
+
   drawKeywords = (): void => {
     const numKeywords = this.keywords.size;
 
@@ -156,49 +183,49 @@ class DescriptionBox {
   };
 
   draw = (): void => {
-    this.ctx.font = 'bold 34px UniversRegular';
-    this.ctx.fillStyle = DescriptionBox.DESCRIPTION_WHITE;
-    this.ctx.textAlign = 'center';
-    let currentLine = '';
-    let lineIndex = 0;
-    let descriptionYOffset = 328 - (this.lineWidths.length - 1) * 39;
-    let characterX = this.canvas.width / 2 - this.lineWidths[lineIndex] / 2;
-    console.log(this.parsed);
-
-    if (this.parsed.length !== 0) {
-      this.nameVerticalOffset += 47;
-    }
-    this.parsed.forEach((word) => {
-      console.log(currentLine);
-      if (word === '<#>') {
-        this.ctx.fillStyle = 'yellow';
-      } else if (word === '</#>') {
-        this.ctx.fillStyle = DescriptionBox.DESCRIPTION_WHITE;
-      } else {
-        const newLine = `${currentLine}${word}`;
-        const width =
-          this.ctx.measureText(newLine).width - newLine.length * 1.35;
-
-        if (width > this.lineWidths[lineIndex]) {
-          currentLine = word;
-          lineIndex += 1;
-          this.nameVerticalOffset += DescriptionBox.VERTICAL_OFFSET_PER_LINE;
-          characterX =
-            this.canvas.width / 2 - this.lineWidths[lineIndex] / 2 + 4;
-          descriptionYOffset += 39;
-        } else {
-          currentLine = newLine;
-          const currentWord = word;
-          characterX += this.ctx.measureText(currentWord).width / 2 - 0.675;
-          this.ctx.fillText(
-            currentWord,
-            characterX,
-            this.canvas.height / 2 + descriptionYOffset
-          );
-          characterX += this.ctx.measureText(currentWord).width / 2 - 0.675;
-        }
-      }
-    });
+    // this.ctx.font = 'bold 34px UniversRegular';
+    // this.ctx.fillStyle = DescriptionBox.DESCRIPTION_WHITE;
+    // this.ctx.textAlign = 'center';
+    // let currentLine = '';
+    // let lineIndex = 0;
+    // let descriptionYOffset = 328 - (this.lineWidths.length - 1) * 39;
+    // let characterX = this.canvas.width / 2 - this.lineWidths[lineIndex] / 2;
+    // console.log(this.parsed);
+    //
+    // if (this.parsed.length !== 0) {
+    //   this.nameVerticalOffset += 47;
+    // }
+    // this.parsed.forEach((word) => {
+    //   console.log(currentLine);
+    //   if (word === '<#>') {
+    //     this.ctx.fillStyle = 'yellow';
+    //   } else if (word === '</#>') {
+    //     this.ctx.fillStyle = DescriptionBox.DESCRIPTION_WHITE;
+    //   } else {
+    //     const newLine = `${currentLine}${word}`;
+    //     const width =
+    //       this.ctx.measureText(newLine).width - newLine.length * 1.35;
+    //
+    //     if (width > this.lineWidths[lineIndex]) {
+    //       currentLine = word;
+    //       lineIndex += 1;
+    //       this.nameVerticalOffset += DescriptionBox.VERTICAL_OFFSET_PER_LINE;
+    //       characterX =
+    //         this.canvas.width / 2 - this.lineWidths[lineIndex] / 2 + 4;
+    //       descriptionYOffset += 39;
+    //     } else {
+    //       currentLine = newLine;
+    //       const currentWord = word;
+    //       characterX += this.ctx.measureText(currentWord).width / 2 - 0.675;
+    //       this.ctx.fillText(
+    //         currentWord,
+    //         characterX,
+    //         this.canvas.height / 2 + descriptionYOffset
+    //       );
+    //       characterX += this.ctx.measureText(currentWord).width / 2 - 0.675;
+    //     }
+    //   }
+    // });
     this.drawName();
   };
 

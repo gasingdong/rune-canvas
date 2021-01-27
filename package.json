@@ -18,6 +18,7 @@
     "expo-font": "~8.3.0",
     "expo-image-picker": "~9.1.0",
     "expo-status-bar": "~1.0.2",
+    "fg-loadcss": "^3.1.0",
     "gatsby": "^2.24.63",
     "gatsby-plugin-manifest": "^2.4.30",
     "gatsby-plugin-offline": "^3.2.28",

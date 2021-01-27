@@ -18,3 +18,8 @@ declare module '*.otf' {
   const value: never;
   export default value;
 }
+
+declare module 'fg-loadcss' {
+  let x: any;
+  export = x;
+}
