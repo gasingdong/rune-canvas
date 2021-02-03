@@ -27,7 +27,10 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
     UniversRegular,
   });
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const descriptionRef = useRef<HTMLDivElement>(null);
+  const [description, setDescription] = useState<HTMLImageElement | null>(null);
+  const [loadedImages, setLoadedImages] = useState<
+    Record<string, HTMLImageElement>
+  >({});
   const images = {
     frames,
     regions,
@@ -54,30 +57,43 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
     return new XMLSerializer().serializeToString(doc.body);
   };
 
-  const renderHtmlToCanvas = (
+  const getHtmlToData = (
     html: string,
     ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number,
     width: number,
     height: number
-  ): void => {
+  ): string => {
     let xml = htmlToXml(html);
     xml = xml.replace(/#/g, '%23');
-    const data = `${
+    return `${
       'data:image/svg+xml;charset=utf-8,' +
       `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">` +
       `${css}<foreignObject width="100%" height="100%">${xml}</foreignObject>` +
       `</svg>`
     }`;
-
-    const img = new Image();
-    console.log(data);
-    img.onload = (): void => {
-      ctx.drawImage(img, x, y);
-    };
-    img.src = data;
   };
+
+  useEffect(() => {
+    let count = 0;
+    const finishLoading = (): void => {
+      setFinishedLoading(true);
+    };
+    const updated = { ...loadedImages };
+    Object.entries(images).forEach((entry) => {
+      const [id, src] = entry;
+      const image = new Image();
+      image.onload = (): void => {
+        count += 1;
+
+        if (count === Object.keys(images).length) {
+          finishLoading();
+        }
+      };
+      image.src = src;
+      updated[id] = image;
+    });
+    setLoadedImages(updated);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -86,41 +102,36 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
       const ctx = canvas.getContext('2d');
 
       if (ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const loadedImages: { [key: string]: HTMLImageElement } = {};
-        let count = 0;
-        const finishLoading = (): void => {
-          loadFonts(ctx);
-          const card = new Card(canvas, ctx, config, loadedImages);
-
-          if (config.description.length > 0) {
-            renderHtmlToCanvas(
-              config.description,
-              ctx,
-              38,
-              canvas.height / 2 + 289,
-              600,
-              500
-            );
-          }
+        if (config.description.length === 0) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          const card = new Card(canvas, ctx, config, loadedImages, undefined);
           card.draw();
-        };
-        Object.entries(images).forEach((entry) => {
-          const [id, src] = entry;
+        } else {
           const image = new Image();
           image.onload = (): void => {
-            count += 1;
-
-            if (count === Object.keys(images).length) {
-              finishLoading();
-            }
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const card = new Card(canvas, ctx, config, loadedImages, image);
+            card.draw();
           };
-          image.src = src;
-          loadedImages[id] = image;
-        });
+          image.src = getHtmlToData(config.description, ctx, 600, 500);
+        }
       }
     }
-  }, [config, loaded]);
+  }, [config.description]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+
+    if (canvas && finishedLoading && loadedImages) {
+      const ctx = canvas.getContext('2d');
+
+      if (ctx) {
+        loadFonts(ctx);
+        const card = new Card(canvas, ctx, config, loadedImages, undefined);
+        card.draw();
+      }
+    }
+  }, [loadedImages, finishedLoading]);
 
   if (!loaded) {
     return <AppLoading />;

@@ -23,17 +23,21 @@ class Card {
 
   private readonly descriptionBox: DescriptionBox;
 
+  private readonly descriptionImage: HTMLImageElement | undefined;
+
   constructor(
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D,
     options: CardConfig,
-    images: { [key: string]: HTMLImageElement }
+    images: { [p: string]: HTMLImageElement },
+    descriptionImage: HTMLImageElement | undefined
   ) {
     this.canvas = canvas;
     this.ctx = ctx;
     this.settings = options;
     this.images = images;
     this.descriptionBox = new DescriptionBox(canvas, ctx, options, images, 610);
+    this.descriptionImage = descriptionImage;
   }
 
   drawStrokedText = (
@@ -136,6 +140,16 @@ class Card {
     );
   };
 
+  drawDescription = (): void => {
+    if (this.descriptionImage !== undefined) {
+      this.ctx.drawImage(
+        this.descriptionImage,
+        38,
+        this.canvas.height / 2 + 289
+      );
+    }
+  };
+
   draw = (): void => {
     this.drawMain();
     this.drawFrame();
@@ -143,7 +157,7 @@ class Card {
     this.drawPower();
     this.drawHealth();
     this.drawCost();
-    this.descriptionBox.draw();
+    this.drawDescription();
   };
 }
 
