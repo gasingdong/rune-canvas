@@ -45,7 +45,7 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
     const doc = document.implementation.createHTMLDocument('');
     doc.write(html);
 
-    if (doc.documentElement.namespaceURI != null) {
+    if (doc.documentElement.namespaceURI !== null) {
       doc.documentElement.setAttribute(
         'xmlns',
         doc.documentElement.namespaceURI
@@ -92,14 +92,17 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
         const finishLoading = (): void => {
           loadFonts(ctx);
           const card = new Card(canvas, ctx, config, loadedImages);
-          renderHtmlToCanvas(
-            config.description,
-            ctx,
-            38,
-            canvas.height / 2 + 289,
-            600,
-            500
-          );
+
+          if (config.description.length > 0) {
+            renderHtmlToCanvas(
+              config.description,
+              ctx,
+              38,
+              canvas.height / 2 + 289,
+              600,
+              500
+            );
+          }
           card.draw();
         };
         Object.entries(images).forEach((entry) => {
