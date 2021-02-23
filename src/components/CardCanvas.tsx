@@ -8,7 +8,7 @@ import Univers55 from '../../assets/fonts/Univers55.ttf';
 import Univers59 from '../../assets/fonts/Univers59-UltraCondensed.ttf';
 import UniversRegular from '../../assets/fonts/UniversforRiotGames-Regular.ttf';
 import frames from '../../assets/frames.png';
-import regions from '../../assets/regions.png';
+import icons from '../../assets/icons.png';
 import Card from '../utilities/card';
 import css from '../stylesheet';
 
@@ -33,7 +33,7 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
   >({});
   const images = {
     frames,
-    regions,
+    icons,
   };
 
   const loadFonts = (ctx: CanvasRenderingContext2D): void => {
