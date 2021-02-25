@@ -8,6 +8,7 @@ import { Rarity } from '../utilities/card-enums';
 import Region from '../utilities/region';
 import ControlledCounter from './ControlledCounter';
 import MultiPicker from './MultiPicker';
+import * as lang from '../lang/en_us.json';
 
 interface CardConfigurationProps {
   config: CardConfig;
@@ -39,7 +40,7 @@ const CardConfiguration: React.FC<CardConfigurationProps> = (
   };
 
   const updateRegion = (itemValue: ReactText): void => {
-    const selectedRegion = Region.getRegion(itemValue.toString());
+    const selectedRegion = Region.get(itemValue.toString());
 
     if (selectedRegion) {
       setConfig({
@@ -132,6 +133,15 @@ const CardConfiguration: React.FC<CardConfigurationProps> = (
     }
   };
 
+  const getRegionLabel = (id: string): string => {
+    const key = `regions.${id}`;
+
+    if (key in lang) {
+      return lang[key as keyof typeof lang];
+    }
+    return id;
+  };
+
   return (
     <View>
       <Picker selectedValue={config.rarity} onValueChange={updateRarity}>
@@ -147,10 +157,10 @@ const CardConfiguration: React.FC<CardConfigurationProps> = (
         selectedValue={config.region.toString()}
         onValueChange={updateRegion}
       >
-        {Region.getRegions().map((element) => (
+        {Region.getAll().map((element) => (
           <Picker.Item
             key={element.toString()}
-            label={element.name}
+            label={getRegionLabel(element.toString())}
             value={element.toString()}
           />
         ))}

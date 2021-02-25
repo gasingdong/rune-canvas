@@ -6,9 +6,10 @@ export enum Rarity {
 }
 
 export enum Type {
-  FOLLOWER,
-  CHAMPION,
-  SPELL,
+  FOLLOWER = 'follower',
+  CHAMPION = 'champion',
+  SPELL = 'spell',
+  LANDMARK = 'landmark',
 }
 
 export enum Keyword {
@@ -35,8 +36,9 @@ export enum Keyword {
   VULNERABLE = 'vulnerable',
 }
 
-export enum SpellKeyword {
+export enum SpellSpeed {
   BURST = 'burst',
   FAST = 'fast',
   SLOW = 'slow',
+  FOCUS = 'focus',
 }

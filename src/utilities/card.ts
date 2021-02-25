@@ -91,17 +91,17 @@ class Card {
   };
 
   drawRegion = (): void => {
-    this.ctx.drawImage(
-      this.images.regions,
-      this.settings.region.position[0],
-      this.settings.region.position[1],
-      128,
-      128,
-      132,
-      400,
-      128 * 0.4,
-      128 * 0.4
-    );
+    // this.ctx.drawImage(
+    //   this.images.regions,
+    //   this.settings.region.position[0],
+    //   this.settings.region.position[1],
+    //   128,
+    //   128,
+    //   132,
+    //   400,
+    //   128 * 0.4,
+    //   128 * 0.4
+    // );
   };
 
   drawPower = (): void => {
@@ -152,12 +152,12 @@ class Card {
 
   draw = (): void => {
     this.drawMain();
-    this.drawFrame();
-    this.drawRegion();
-    this.drawPower();
-    this.drawHealth();
-    this.drawCost();
-    this.drawDescription();
+    // this.drawFrame();
+    // this.drawRegion();
+    // this.drawPower();
+    // this.drawHealth();
+    // this.drawCost();
+    // this.drawDescription();
   };
 }
 

@@ -23,3 +23,8 @@ declare module 'fg-loadcss' {
   let x: any;
   export = x;
 }
+
+declare module 'en_us.json' {
+  export const address: string;
+  export const port: number;
+}
