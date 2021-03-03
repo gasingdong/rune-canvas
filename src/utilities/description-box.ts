@@ -1,4 +1,4 @@
-import { CardConfig } from '../custom_typings';
+import { CardMeta } from '../custom_typings';
 import { Keyword } from './card-enums';
 
 class DescriptionBox {
@@ -45,7 +45,7 @@ class DescriptionBox {
   constructor(
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D,
-    config: CardConfig,
+    config: CardMeta,
     images: { [key: string]: HTMLImageElement },
     maxWidth: number,
     spaceBroken = true,

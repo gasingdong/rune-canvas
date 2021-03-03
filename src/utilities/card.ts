@@ -1,7 +1,10 @@
-import { CardConfig } from '../custom_typings';
+import { CardMeta, CardImages } from '../custom_typings';
 import DescriptionBox from './description-box';
+import { Keyword } from './card-enums';
 
 class Card {
+  static readonly NO_KEYWORDS: Set<Keyword> = new Set();
+
   static readonly SPRITES = {
     common: 0,
     rare: 680,
@@ -17,27 +20,20 @@ class Card {
 
   private readonly ctx: CanvasRenderingContext2D;
 
-  private readonly settings: CardConfig;
+  private readonly meta: CardMeta;
 
-  private readonly images: { [key: string]: HTMLImageElement };
-
-  private readonly descriptionBox: DescriptionBox;
-
-  private readonly descriptionImage: HTMLImageElement | undefined;
+  private readonly images: CardImages;
 
   constructor(
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D,
-    options: CardConfig,
-    images: { [p: string]: HTMLImageElement },
-    descriptionImage: HTMLImageElement | undefined
+    meta: CardMeta,
+    images: CardImages
   ) {
     this.canvas = canvas;
     this.ctx = ctx;
-    this.settings = options;
+    this.meta = meta;
     this.images = images;
-    this.descriptionBox = new DescriptionBox(canvas, ctx, options, images, 610);
-    this.descriptionImage = descriptionImage;
   }
 
   drawStrokedText = (
@@ -56,16 +52,15 @@ class Card {
     ctx.fillText(text, x, y);
   };
 
-  drawMain = (): void => {
-    if (this.images.content) {
-      const contentRatio =
-        this.images.content.height / this.images.content.width;
+  drawArt = (): void => {
+    if (this.images.art) {
+      const contentRatio = this.images.art.height / this.images.art.width;
       this.ctx.drawImage(
-        this.images.content,
+        this.images.art,
         0,
         0,
-        this.images.content.width,
-        this.images.content.height,
+        this.images.art.width,
+        this.images.art.height,
         0,
         0,
         this.canvas.width,
@@ -75,26 +70,28 @@ class Card {
   };
 
   drawFrame = (): void => {
-    this.ctx.fillStyle = Card.BACKGROUND_COLOR;
-    this.ctx.fillRect(20, 40, 640, 925);
-    this.ctx.drawImage(
-      this.images.frames,
-      Card.SPRITES[this.settings.rarity],
-      0,
-      680,
-      this.images.frames.height,
-      0,
-      0,
-      this.canvas.width,
-      this.canvas.height
-    );
+    if (this.images.frames) {
+      this.ctx.fillStyle = Card.BACKGROUND_COLOR;
+      this.ctx.fillRect(20, 40, 640, 925);
+      this.ctx.drawImage(
+        this.images.frames,
+        1360,
+        0,
+        680,
+        1024,
+        0,
+        0,
+        this.canvas.width,
+        this.canvas.height
+      );
+    }
   };
 
   drawRegion = (): void => {
     // this.ctx.drawImage(
     //   this.images.regions,
-    //   this.settings.region.position[0],
-    //   this.settings.region.position[1],
+    //   this.meta.region.position[0],
+    //   this.meta.region.position[1],
     //   128,
     //   128,
     //   132,
@@ -109,7 +106,7 @@ class Card {
     this.ctx.textAlign = 'center';
     this.drawStrokedText(
       this.ctx,
-      `${this.settings.power}`,
+      `${this.meta.power}`,
       88,
       this.canvas.height - 86,
       '72px Beaufort-Bold'
@@ -121,7 +118,7 @@ class Card {
     this.ctx.textAlign = 'center';
     this.drawStrokedText(
       this.ctx,
-      `${this.settings.health}`,
+      `${this.meta.health}`,
       this.canvas.width - 88,
       this.canvas.height - 86,
       '72px Beaufort-Bold'
@@ -133,7 +130,7 @@ class Card {
     this.ctx.textAlign = 'center';
     this.drawStrokedText(
       this.ctx,
-      `${this.settings.mana}`,
+      `${this.meta.cost}`,
       90,
       133,
       '92px Beaufort-Bold'
@@ -141,9 +138,9 @@ class Card {
   };
 
   drawDescription = (): void => {
-    if (this.descriptionImage !== undefined) {
+    if (this.images.description) {
       this.ctx.drawImage(
-        this.descriptionImage,
+        this.images.description,
         38,
         this.canvas.height / 2 + 289
       );
@@ -151,8 +148,8 @@ class Card {
   };
 
   draw = (): void => {
-    this.drawMain();
-    // this.drawFrame();
+    this.drawArt();
+    this.drawFrame();
     // this.drawRegion();
     // this.drawPower();
     // this.drawHealth();

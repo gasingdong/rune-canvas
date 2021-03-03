@@ -1,40 +1,31 @@
-import { useFonts } from 'expo-font';
 import React, { useEffect, useRef, useState } from 'react';
-import { AppLoading } from 'expo';
-import { CardConfig } from '../custom_typings';
-import BeaufortBold from '../../assets/fonts/BeaufortforLOLJa-Bold.ttf';
-import BeaufortRegular from '../../assets/fonts/BeaufortforLOLJa-Regular.ttf';
-import Univers55 from '../../assets/fonts/Univers55.ttf';
-import Univers59 from '../../assets/fonts/Univers59-UltraCondensed.ttf';
-import UniversRegular from '../../assets/fonts/UniversforRiotGames-Regular.ttf';
+import { CardImages, CardMeta } from '../custom_typings';
 import frames from '../../assets/frames.png';
 import icons from '../../assets/icons.png';
 import Card from '../utilities/card';
 import css from '../stylesheet';
 
 interface CardCanvasProps {
-  config: CardConfig;
+  meta: CardMeta;
 }
 
 const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
-  const { config } = props;
+  const { meta } = props;
   const [finishedLoading, setFinishedLoading] = useState(false);
-  const [loaded, error] = useFonts({
-    'Beaufort-Bold': BeaufortBold,
-    'Beaufort-Regular': BeaufortRegular,
-    Univers55,
-    Univers59,
-    UniversRegular,
-  });
+  // const [loaded, error] = useFonts({
+  //   'Beaufort-Bold': BeaufortBold,
+  //   'Beaufort-Regular': BeaufortRegular,
+  //   Univers55,
+  //   Univers59,
+  //   UniversRegular,
+  // });
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [description, setDescription] = useState<HTMLImageElement | null>(null);
-  const [loadedImages, setLoadedImages] = useState<
-    Record<string, HTMLImageElement>
-  >({});
-  const images = {
-    frames,
-    icons,
-  };
+  const [images, setImages] = useState<CardImages>({
+    frames: null,
+    icons: null,
+    description: null,
+    art: null,
+  });
 
   const loadFonts = (ctx: CanvasRenderingContext2D): void => {
     ctx.font = '1px Beaufort-Bold';
@@ -75,67 +66,76 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
 
   useEffect(() => {
     let count = 0;
+    const newImages = { ...images };
     const finishLoading = (): void => {
+      setImages(newImages);
       setFinishedLoading(true);
     };
-    const updated = { ...loadedImages };
-    Object.entries(images).forEach((entry) => {
-      const [id, src] = entry;
-      const image = new Image();
-      image.onload = (): void => {
-        count += 1;
+    let image = new Image();
+    image.onload = (): void => {
+      count += 1;
 
-        if (count === Object.keys(images).length) {
-          finishLoading();
-        }
-      };
-      image.src = src;
-      updated[id] = image;
-    });
-    setLoadedImages(updated);
+      if (count === 2) {
+        finishLoading();
+      }
+    };
+    image.src = frames;
+    newImages.frames = image;
+    image = new Image();
+    image.onload = (): void => {
+      count += 1;
+
+      if (count === 2) {
+        finishLoading();
+      }
+    };
+    image.src = icons;
+    newImages.icons = image;
   }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
 
-    if (canvas && loaded) {
+    if (canvas) {
       const ctx = canvas.getContext('2d');
 
       if (ctx) {
-        if (config.description.length === 0) {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          const card = new Card(canvas, ctx, config, loadedImages, undefined);
-          card.draw();
+        if (meta.description.length === 0) {
+          setImages({
+            ...images,
+            description: null,
+          });
         } else {
           const image = new Image();
           image.onload = (): void => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const card = new Card(canvas, ctx, config, loadedImages, image);
-            card.draw();
+            setImages({
+              ...images,
+              description: image,
+            });
           };
-          image.src = getHtmlToData(config.description, ctx, 600, 500);
+          image.src = getHtmlToData(meta.description, ctx, 600, 500);
         }
       }
     }
-  }, [config.description]);
+  }, [meta.description]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
 
-    if (canvas && finishedLoading && loadedImages) {
+    if (canvas && finishedLoading) {
       const ctx = canvas.getContext('2d');
 
       if (ctx) {
-        loadFonts(ctx);
-        const card = new Card(canvas, ctx, config, loadedImages, undefined);
+        // loadFonts(ctx);
+        const card = new Card(canvas, ctx, meta, images);
         card.draw();
       }
     }
-  }, [loadedImages, finishedLoading]);
+  }, [finishedLoading, images]);
 
-  if (!loaded) {
-    return <AppLoading />;
-  }
+  // if (!loaded) {
+  //   return <AppLoading />;
+  // }
   return (
     <>
       <canvas ref={canvasRef} width={680} height={1024} />

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import CardCanvas from './src/components/CardCanvas';
 import { Keyword, Rarity } from './src/utilities/card-enums';
 import Region from './src/utilities/region';
-import { CardConfig } from './src/custom_typings';
+import { CardMeta } from './src/custom_typings';
 import CardConfiguration from './src/components/CardConfiguration';
 
 const white = '#fff';
@@ -18,14 +18,14 @@ const styles = StyleSheet.create({
 });
 
 const App: React.FC = () => {
-  const [config, setConfig] = useState<CardConfig>({
-    rarity: Rarity.COMMON,
-    region: Region.RUNETERRA,
+  const [meta, setMeta] = useState<CardMeta>({
+    rarity: Rarity.NONE,
+    region: Region.NONE,
     art: '',
     description: '',
     name: '',
     power: 0,
-    mana: 0,
+    cost: 0,
     health: 0,
     keywords: new Set<Keyword>(),
   });
@@ -33,8 +33,8 @@ const App: React.FC = () => {
   return (
     <View style={styles.container}>
       <Text>Rune Canvas</Text>
-      <CardCanvas config={config} />
-      <CardConfiguration config={config} setConfig={setConfig} />
+      <CardCanvas meta={meta} />
+      <CardConfiguration meta={meta} setMeta={setMeta} />
     </View>
   );
 };

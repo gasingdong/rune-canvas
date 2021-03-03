@@ -1,16 +1,10 @@
 import React from 'react';
-import {
-  GestureResponderEvent,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 interface ControlledCounterProps {
-  decrement: (event: GestureResponderEvent) => void;
-  increment: (event: GestureResponderEvent) => void;
+  decrement: () => void;
+  increment: () => void;
   value: number;
   title: string;
 }

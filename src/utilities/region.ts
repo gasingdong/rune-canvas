@@ -1,7 +1,7 @@
 class Region {
   private static readonly VALUES: Array<Region> = [];
 
-  // static readonly RUNETERRA = new Region('runeterra');
+  static readonly NONE = new Region('none');
 
   static readonly BILGEWATER = new Region('bilgewater');
 

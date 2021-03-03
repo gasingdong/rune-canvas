@@ -3,7 +3,7 @@ import React, { Dispatch, ReactText, SetStateAction } from 'react';
 import { Button, StyleSheet, TextInput, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { OptionTypeBase, ValueType } from 'react-select';
-import { CardConfig } from '../custom_typings';
+import { CardMeta } from '../custom_typings';
 import { Rarity } from '../utilities/card-enums';
 import Region from '../utilities/region';
 import ControlledCounter from './ControlledCounter';
@@ -11,8 +11,8 @@ import MultiPicker from './MultiPicker';
 import * as lang from '../lang/en_us.json';
 
 interface CardConfigurationProps {
-  config: CardConfig;
-  setConfig: Dispatch<SetStateAction<CardConfig>>;
+  meta: CardMeta;
+  setMeta: Dispatch<SetStateAction<CardMeta>>;
 }
 
 const borderColor = '#1c1c1c';
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 const CardConfiguration: React.FC<CardConfigurationProps> = (
   props: CardConfigurationProps
 ) => {
-  const { config, setConfig } = props;
+  const { meta, setMeta } = props;
 
   const updateRarity = (itemValue: ReactText): void => {
     const matching = Object.values(Rarity).filter(
@@ -32,8 +32,8 @@ const CardConfiguration: React.FC<CardConfigurationProps> = (
     );
 
     if (matching.length > 0) {
-      setConfig({
-        ...config,
+      setMeta({
+        ...meta,
         rarity: matching[0],
       });
     }
@@ -43,91 +43,59 @@ const CardConfiguration: React.FC<CardConfigurationProps> = (
     const selectedRegion = Region.get(itemValue.toString());
 
     if (selectedRegion) {
-      setConfig({
-        ...config,
+      setMeta({
+        ...meta,
         region: selectedRegion,
       });
     }
   };
 
-  const pickCardImage = async (): Promise<void> => {
+  const updateArt = async (): Promise<void> => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
     });
 
     if (!result.cancelled) {
-      setConfig({
-        ...config,
+      setMeta({
+        ...meta,
         art: result.uri,
       });
     }
   };
 
   const updateName = (text: string): void => {
-    setConfig({
-      ...config,
+    setMeta({
+      ...meta,
       name: text,
     });
   };
 
   const updateDescription = (text: string): void => {
-    setConfig({
-      ...config,
+    setMeta({
+      ...meta,
       description: text,
     });
   };
 
-  const increaseMana = (): void => {
-    setConfig({
-      ...config,
-      mana: config.mana + 1,
-    });
-  };
-
-  const decreaseMana = (): void => {
-    setConfig({
-      ...config,
-      mana: config.mana - 1,
-    });
-  };
-
-  const increasePower = (): void => {
-    setConfig({
-      ...config,
-      power: config.power + 1,
-    });
-  };
-
-  const decreasePower = (): void => {
-    setConfig({
-      ...config,
-      power: config.power - 1,
-    });
-  };
-
-  const increaseHealth = (): void => {
-    setConfig({
-      ...config,
-      health: config.health + 1,
-    });
-  };
-
-  const decreaseHealth = (): void => {
-    setConfig({
-      ...config,
-      health: config.health - 1,
+  const updateCounter = (
+    key: 'health' | 'cost' | 'power',
+    amount: number
+  ): void => {
+    setMeta({
+      ...meta,
+      [key]: meta[key] + amount,
     });
   };
 
   const updateKeywords = (keywords: ValueType<OptionTypeBase>): void => {
     if (keywords && keywords.length <= 4) {
-      setConfig({
-        ...config,
+      setMeta({
+        ...meta,
         keywords: new Set(keywords.map((element: OptionTypeBase) => element)),
       });
     } else if (!keywords) {
-      setConfig({
-        ...config,
+      setMeta({
+        ...meta,
         keywords: new Set(),
       });
     }
@@ -144,7 +112,7 @@ const CardConfiguration: React.FC<CardConfigurationProps> = (
 
   return (
     <View>
-      <Picker selectedValue={config.rarity} onValueChange={updateRarity}>
+      <Picker selectedValue={meta.rarity} onValueChange={updateRarity}>
         {Object.values(Rarity).map((element) => (
           <Picker.Item
             key={element}
@@ -154,7 +122,7 @@ const CardConfiguration: React.FC<CardConfigurationProps> = (
         ))}
       </Picker>
       <Picker
-        selectedValue={config.region.toString()}
+        selectedValue={meta.region.toString()}
         onValueChange={updateRegion}
       >
         {Region.getAll().map((element) => (
@@ -166,36 +134,36 @@ const CardConfiguration: React.FC<CardConfigurationProps> = (
         ))}
       </Picker>
       <MultiPicker
-        values={Array.from(config.keywords)}
+        values={Array.from(meta.keywords)}
         setValues={updateKeywords}
       />
-      <Button title="Upload card image" onPress={pickCardImage} />
+      <Button title="Upload card image" onPress={updateArt} />
       <ControlledCounter
-        title="Mana"
-        decrement={decreaseMana}
-        increment={increaseMana}
-        value={config.mana}
+        title="Cost"
+        decrement={(): void => updateCounter('cost', -1)}
+        increment={(): void => updateCounter('cost', 1)}
+        value={meta.cost}
       />
       <ControlledCounter
         title="Power"
-        decrement={decreasePower}
-        increment={increasePower}
-        value={config.power}
+        decrement={(): void => updateCounter('power', -1)}
+        increment={(): void => updateCounter('power', 1)}
+        value={meta.power}
       />
       <ControlledCounter
         title="Health"
-        decrement={decreaseHealth}
-        increment={increaseHealth}
-        value={config.health}
+        decrement={(): void => updateCounter('health', -1)}
+        increment={(): void => updateCounter('health', 1)}
+        value={meta.health}
       />
       <TextInput
         style={styles.textBox}
-        value={config.name}
+        value={meta.name}
         onChangeText={updateName}
       />
       <TextInput
         style={styles.textBox}
-        value={config.description}
+        value={meta.description}
         onChangeText={updateDescription}
       />
     </View>
