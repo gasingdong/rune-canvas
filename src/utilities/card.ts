@@ -53,6 +53,7 @@ class Card {
   };
 
   drawArt = (): void => {
+    this.ctx.clearRect(20, 40, 640, 925);
     this.ctx.fillStyle = Card.BACKGROUND_COLOR;
     this.ctx.fillRect(20, 40, 640, 925);
 
@@ -64,10 +65,10 @@ class Card {
         0,
         this.images.art.width,
         this.images.art.height,
-        0,
-        0,
-        this.canvas.width,
-        this.canvas.width * contentRatio
+        20,
+        40,
+        640,
+        640 * contentRatio
       );
     }
   };
