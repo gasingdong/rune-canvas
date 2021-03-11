@@ -94,6 +94,17 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
   }, []);
 
   useEffect(() => {
+    const image = new Image();
+    image.onload = (): void => {
+      setImages({
+        ...images,
+        art: image,
+      });
+    };
+    image.src = meta.art;
+  }, [meta.art]);
+
+  useEffect(() => {
     const canvas = canvasRef.current;
 
     if (canvas) {

@@ -53,6 +53,9 @@ class Card {
   };
 
   drawArt = (): void => {
+    this.ctx.fillStyle = Card.BACKGROUND_COLOR;
+    this.ctx.fillRect(20, 40, 640, 925);
+
     if (this.images.art) {
       const contentRatio = this.images.art.height / this.images.art.width;
       this.ctx.drawImage(
@@ -71,8 +74,6 @@ class Card {
 
   drawFrame = (): void => {
     if (this.images.frames) {
-      this.ctx.fillStyle = Card.BACKGROUND_COLOR;
-      this.ctx.fillRect(20, 40, 640, 925);
       this.ctx.drawImage(
         this.images.frames,
         1360,
