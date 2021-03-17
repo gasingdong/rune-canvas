@@ -142,7 +142,7 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
         card.draw();
       }
     }
-  }, [finishedLoading, images]);
+  }, [finishedLoading, images, meta]);
 
   // if (!loaded) {
   //   return <AppLoading />;

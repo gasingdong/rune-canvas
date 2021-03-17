@@ -1,3 +1,14 @@
+type RegionIcon =
+  | 'icon-bilgewater.png'
+  | 'icon-demacia.png'
+  | 'icon-freljord.png'
+  | 'icon-targon.png'
+  | 'icon-pnz.png'
+  | 'icon-shurima.png'
+  | 'icon-ionia.png'
+  | 'icon-noxus.png'
+  | 'icon-shadowisles.png';
+
 class Region {
   private static readonly VALUES: Array<Region> = [];
 
@@ -33,6 +44,10 @@ class Region {
   protected constructor(private readonly id: string) {
     Region.VALUES.push(this);
   }
+
+  getIcon = (): RegionIcon => {
+    return <RegionIcon>`icon-${this.id}.png`;
+  };
 
   toString = (): string => {
     return this.id;

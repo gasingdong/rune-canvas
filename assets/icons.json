@@ -1,0 +1,435 @@
+{
+	"icons": {
+		"common-gem.png": {
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 197,
+				"h": 85
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 197,
+				"h": 85
+			},
+			"sourceSize": {
+				"w": 197,
+				"h": 85
+			}
+		},
+		"ephemeral.png": {
+			"frame": {
+				"x": 197,
+				"y": 0,
+				"w": 56,
+				"h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 56,
+				"h": 56
+			},
+			"sourceSize": {
+				"w": 56,
+				"h": 56
+			}
+		},
+		"epic-gem.png": {
+			"frame": {
+				"x": 0,
+				"y": 85,
+				"w": 197,
+				"h": 85
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 197,
+				"h": 85
+			},
+			"sourceSize": {
+				"w": 197,
+				"h": 85
+			}
+		},
+		"fearsome.png": {
+			"frame": {
+				"x": 253,
+				"y": 0,
+				"w": 56,
+				"h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 56,
+				"h": 56
+			},
+			"sourceSize": {
+				"w": 56,
+				"h": 56
+			}
+		},
+		"fleeting.png": {
+			"frame": {
+				"x": 309,
+				"y": 0,
+				"w": 56,
+				"h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 56,
+				"h": 56
+			},
+			"sourceSize": {
+				"w": 56,
+				"h": 56
+			}
+		},
+		"icon-bilgewater.png": {
+			"frame": {
+				"x": 197,
+				"y": 56,
+				"w": 80,
+				"h": 83
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 80,
+				"h": 83
+			},
+			"sourceSize": {
+				"w": 80,
+				"h": 83
+			}
+		},
+		"icon-demacia.png": {
+			"frame": {
+				"x": 277,
+				"y": 56,
+				"w": 80,
+				"h": 83
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 80,
+				"h": 83
+			},
+			"sourceSize": {
+				"w": 80,
+				"h": 83
+			}
+		},
+		"icon-freljord.png": {
+			"frame": {
+				"x": 197,
+				"y": 139,
+				"w": 80,
+				"h": 83
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 80,
+				"h": 83
+			},
+			"sourceSize": {
+				"w": 80,
+				"h": 83
+			}
+		},
+		"icon-ionia.png": {
+			"frame": {
+				"x": 277,
+				"y": 139,
+				"w": 80,
+				"h": 83
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 80,
+				"h": 83
+			},
+			"sourceSize": {
+				"w": 80,
+				"h": 83
+			}
+		},
+		"icon-noxus.png": {
+			"frame": {
+				"x": 0,
+				"y": 222,
+				"w": 80,
+				"h": 83
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 80,
+				"h": 83
+			},
+			"sourceSize": {
+				"w": 80,
+				"h": 83
+			}
+		},
+		"icon-pnz.png": {
+			"frame": {
+				"x": 80,
+				"y": 222,
+				"w": 80,
+				"h": 83
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 80,
+				"h": 83
+			},
+			"sourceSize": {
+				"w": 80,
+				"h": 83
+			}
+		},
+		"icon-shadowisles.png": {
+			"frame": {
+				"x": 160,
+				"y": 222,
+				"w": 80,
+				"h": 83
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 80,
+				"h": 83
+			},
+			"sourceSize": {
+				"w": 80,
+				"h": 83
+			}
+		},
+		"icon-shurima.png": {
+			"frame": {
+				"x": 240,
+				"y": 222,
+				"w": 80,
+				"h": 83
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 80,
+				"h": 83
+			},
+			"sourceSize": {
+				"w": 80,
+				"h": 83
+			}
+		},
+		"icon-targon.png": {
+			"frame": {
+				"x": 0,
+				"y": 305,
+				"w": 80,
+				"h": 83
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 80,
+				"h": 83
+			},
+			"sourceSize": {
+				"w": 80,
+				"h": 83
+			}
+		},
+		"keyword.png": {
+			"frame": {
+				"x": 80,
+				"y": 305,
+				"w": 92,
+				"h": 82
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 92,
+				"h": 82
+			},
+			"sourceSize": {
+				"w": 92,
+				"h": 82
+			}
+		},
+		"keyword_fill.png": {
+			"frame": {
+				"x": 172,
+				"y": 305,
+				"w": 170,
+				"h": 82
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 170,
+				"h": 82
+			},
+			"sourceSize": {
+				"w": 170,
+				"h": 82
+			}
+		},
+		"keyword_left.png": {
+			"frame": {
+				"x": 365,
+				"y": 0,
+				"w": 20,
+				"h": 82
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 20,
+				"h": 82
+			},
+			"sourceSize": {
+				"w": 20,
+				"h": 82
+			}
+		},
+		"keyword_right.png": {
+			"frame": {
+				"x": 357,
+				"y": 82,
+				"w": 22,
+				"h": 82
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 22,
+				"h": 82
+			},
+			"sourceSize": {
+				"w": 22,
+				"h": 82
+			}
+		},
+		"rare-gem.png": {
+			"frame": {
+				"x": 385,
+				"y": 0,
+				"w": 197,
+				"h": 85
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 197,
+				"h": 85
+			},
+			"sourceSize": {
+				"w": 197,
+				"h": 85
+			}
+		},
+		"regeneration.png": {
+			"frame": {
+				"x": 379,
+				"y": 85,
+				"w": 56,
+				"h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 56,
+				"h": 56
+			},
+			"sourceSize": {
+				"w": 56,
+				"h": 56
+			}
+		},
+		"tough.png": {
+			"frame": {
+				"x": 435,
+				"y": 85,
+				"w": 56,
+				"h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 56,
+				"h": 56
+			},
+			"sourceSize": {
+				"w": 56,
+				"h": 56
+			}
+		}
+	},
+	"meta": {
+		"app": "http://www.codeandweb.com/texturepacker",
+		"version": "1.0",
+		"image": "spritesheet.png",
+		"format": "RGBA8888",
+		"size": {
+			"w": 582,
+			"h": 388
+		},
+		"scale": "1"
+	}
+}

@@ -1,16 +1,11 @@
 import { CardMeta, CardImages } from '../custom_typings';
 import DescriptionBox from './description-box';
 import { Keyword } from './card-enums';
+import icons from '../../assets/icons.json';
+import Region from './region';
 
 class Card {
   static readonly NO_KEYWORDS: Set<Keyword> = new Set();
-
-  static readonly SPRITES = {
-    common: 0,
-    rare: 680,
-    epic: 1360,
-    none: 2040,
-  };
 
   static readonly STAT_WHITE = 'white';
 
@@ -90,17 +85,21 @@ class Card {
   };
 
   drawRegion = (): void => {
-    // this.ctx.drawImage(
-    //   this.images.regions,
-    //   this.meta.region.position[0],
-    //   this.meta.region.position[1],
-    //   128,
-    //   128,
-    //   132,
-    //   400,
-    //   128 * 0.4,
-    //   128 * 0.4
-    // );
+    if (this.images.icons && this.meta.region !== Region.NONE) {
+      const region = this.meta.region.getIcon();
+      const icon = icons.icons[region];
+      this.ctx.drawImage(
+        this.images.icons,
+        icon.frame.x,
+        icon.frame.y,
+        icon.frame.w,
+        icon.frame.h,
+        579,
+        72,
+        icon.frame.w,
+        icon.frame.h
+      );
+    }
   };
 
   drawPower = (): void => {
@@ -152,7 +151,7 @@ class Card {
   draw = (): void => {
     this.drawArt();
     this.drawFrame();
-    // this.drawRegion();
+    this.drawRegion();
     // this.drawPower();
     // this.drawHealth();
     // this.drawCost();
