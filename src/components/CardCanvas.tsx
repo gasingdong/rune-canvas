@@ -24,6 +24,7 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [fontsPreloaded, fontsPreloadingError] = useFonts({
     'Beaufort-Bold': BeaufortBold,
+    Univers55,
   });
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [images, setImages] = useState<CardImages>({
@@ -32,6 +33,7 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
     description: null,
     art: null,
   });
+  const [descriptionHeight, setDescriptionHeight] = useState(0);
   const loadFonts = (): void => {
     Promise.all([new FontFaceObserver('Beaufort-Bold').load()]).then(() => {
       setFontsLoaded(true);
@@ -127,7 +129,20 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
               description: image,
             });
           };
-          image.src = getHtmlToData(meta.description, ctx, 600, 500);
+          image.src = getHtmlToData(meta.description, ctx, 580, 500);
+          const div = document.createElement('div');
+          div.textContent = meta.description;
+          div.style.width = '565px';
+          div.style.maxHeight = '1000px';
+          div.style.fontSize = '34px';
+          div.style.fontFamily = "'Univers 55', sans-serif";
+          div.style.fontWeight = 'bold';
+          div.style.lineHeight = '40px';
+          div.style.textAlign = 'center';
+          div.style.letterSpacing = '-0.7px';
+          document.body.appendChild(div);
+          setDescriptionHeight(div.offsetHeight);
+          document.body.removeChild(div);
         }
       }
     }
@@ -146,7 +161,7 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
       const ctx = canvas.getContext('2d');
 
       if (ctx) {
-        const card = new Card(canvas, ctx, meta, images);
+        const card = new Card(canvas, ctx, meta, images, descriptionHeight);
         card.draw();
       }
     }

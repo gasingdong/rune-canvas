@@ -18,16 +18,20 @@ class Card {
 
   private readonly images: CardImages;
 
+  private readonly descriptionHeight: number;
+
   constructor(
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D,
     meta: CardMeta,
-    images: CardImages
+    images: CardImages,
+    descriptionHeight: number
   ) {
     this.canvas = canvas;
     this.ctx = ctx;
     this.meta = meta;
     this.images = images;
+    this.descriptionHeight = descriptionHeight;
   }
 
   drawStrokedText = (
@@ -141,20 +145,25 @@ class Card {
     if (this.images.description) {
       this.ctx.drawImage(
         this.images.description,
-        38,
-        this.canvas.height / 2 + 289
+        48,
+        this.canvas.height / 2 + 329 - this.descriptionHeight
       );
     }
   };
 
+  clear = (): void => {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  };
+
   draw = (): void => {
+    this.clear();
     this.drawArt();
     this.drawFrame();
     this.drawRegion();
     this.drawPower();
     this.drawHealth();
     this.drawCost();
-    // this.drawDescription();
+    this.drawDescription();
   };
 }
 
