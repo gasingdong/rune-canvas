@@ -3231,6 +3231,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/fontfaceobserver@npm:^0.0.6":
+  version: 0.0.6
+  resolution: "@types/fontfaceobserver@npm:0.0.6"
+  checksum: 1ccd3e88e2cb02217055818f1c591c48fecdb3af7c4cc4fdc0e863987c944dfe973276abc6cb90466c3e589bbf95c30b47dc581ba66d10b7f2799bfd36ae72ff
+  languageName: node
+  linkType: hard
+
 "@types/get-port@npm:^3.2.0":
   version: 3.2.0
   resolution: "@types/get-port@npm:3.2.0"
@@ -18816,6 +18823,7 @@ fsevents@~2.1.2:
     "@createjs/easeljs": ^2.0.0-beta.4
     "@expo/vector-icons": ^10.2.1
     "@react-native-community/picker": ^1.8.0
+    "@types/fontfaceobserver": ^0.0.6
     "@types/react": ~16.9.35
     "@types/react-dom": ~16.9.8
     "@types/react-helmet": ^6.1.0
@@ -18841,6 +18849,7 @@ fsevents@~2.1.2:
     expo-image-picker: ~9.1.0
     expo-status-bar: ~1.0.2
     fg-loadcss: ^3.1.0
+    fontfaceobserver: ^2.1.0
     gatsby: ^2.24.63
     gatsby-plugin-manifest: ^2.4.30
     gatsby-plugin-offline: ^3.2.28

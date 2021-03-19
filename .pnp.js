@@ -40,6 +40,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@createjs/easeljs", "npm:2.0.0-beta.4"],
             ["@expo/vector-icons", "npm:10.2.1"],
             ["@react-native-community/picker", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:1.8.0"],
+            ["@types/fontfaceobserver", "npm:0.0.6"],
             ["@types/react", "npm:16.9.49"],
             ["@types/react-dom", "npm:16.9.8"],
             ["@types/react-helmet", "npm:6.1.0"],
@@ -65,6 +66,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["expo-image-picker", "npm:9.1.1"],
             ["expo-status-bar", "npm:1.0.2"],
             ["fg-loadcss", "npm:3.1.0"],
+            ["fontfaceobserver", "npm:2.1.0"],
             ["gatsby", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:2.24.63"],
             ["gatsby-plugin-manifest", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:2.4.30"],
             ["gatsby-plugin-offline", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:3.2.28"],
@@ -5497,6 +5499,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-events-npm-3.0.0-2eee0ea973-1407d79d6d.zip/node_modules/@types/events/",
           "packageDependencies": [
             ["@types/events", "npm:3.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/fontfaceobserver", [
+        ["npm:0.0.6", {
+          "packageLocation": "./.yarn/cache/@types-fontfaceobserver-npm-0.0.6-fb35fc6134-1ccd3e88e2.zip/node_modules/@types/fontfaceobserver/",
+          "packageDependencies": [
+            ["@types/fontfaceobserver", "npm:0.0.6"]
           ],
           "linkType": "HARD",
         }]
@@ -23408,6 +23419,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@createjs/easeljs", "npm:2.0.0-beta.4"],
             ["@expo/vector-icons", "npm:10.2.1"],
             ["@react-native-community/picker", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:1.8.0"],
+            ["@types/fontfaceobserver", "npm:0.0.6"],
             ["@types/react", "npm:16.9.49"],
             ["@types/react-dom", "npm:16.9.8"],
             ["@types/react-helmet", "npm:6.1.0"],
@@ -23433,6 +23445,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["expo-image-picker", "npm:9.1.1"],
             ["expo-status-bar", "npm:1.0.2"],
             ["fg-loadcss", "npm:3.1.0"],
+            ["fontfaceobserver", "npm:2.1.0"],
             ["gatsby", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:2.24.63"],
             ["gatsby-plugin-manifest", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:2.4.30"],
             ["gatsby-plugin-offline", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:3.2.28"],

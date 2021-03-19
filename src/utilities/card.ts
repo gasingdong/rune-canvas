@@ -1,5 +1,4 @@
-import { CardMeta, CardImages } from '../custom_typings';
-import DescriptionBox from './description-box';
+import { CardImages, CardMeta } from '../custom_typings';
 import { Keyword } from './card-enums';
 import icons from '../../assets/icons.json';
 import Region from './region';
@@ -152,9 +151,9 @@ class Card {
     this.drawArt();
     this.drawFrame();
     this.drawRegion();
-    // this.drawPower();
-    // this.drawHealth();
-    // this.drawCost();
+    this.drawPower();
+    this.drawHealth();
+    this.drawCost();
     // this.drawDescription();
   };
 }
