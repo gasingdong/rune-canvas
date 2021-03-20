@@ -59,7 +59,8 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
     width: number,
     height: number
   ): string => {
-    let xml = htmlToXml(html);
+    const multiline = html.replace(/(?:\r\n|\r|\n)/g, '<br>');
+    let xml = htmlToXml(multiline);
     xml = xml.replace(/#/g, '%23');
     return `${
       'data:image/svg+xml;charset=utf-8,' +
@@ -131,7 +132,7 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
           };
           image.src = getHtmlToData(meta.description, ctx, 580, 500);
           const div = document.createElement('div');
-          div.textContent = meta.description;
+          div.innerHTML = meta.description.replace(/(?:\r\n|\r|\n)/g, '<br>');
           div.style.width = '565px';
           div.style.maxHeight = '1000px';
           div.style.fontSize = '34px';

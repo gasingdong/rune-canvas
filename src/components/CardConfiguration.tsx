@@ -164,6 +164,7 @@ const CardConfiguration: React.FC<CardConfigurationProps> = (
       <TextInput
         style={styles.textBox}
         value={meta.description}
+        multiline
         onChangeText={updateDescription}
       />
     </View>
