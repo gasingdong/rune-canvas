@@ -162,6 +162,20 @@ class Card {
     }
   };
 
+  drawName = (): void => {
+    if (this.meta.name) {
+      const name = this.meta.name.toLocaleUpperCase();
+      this.drawStrokedText(
+        this.ctx,
+        name,
+        this.canvas.width / 2 - this.ctx.measureText(name).width / 2,
+        this.canvas.height / 2 + 100,
+        'Beaufort-Bold',
+        57
+      );
+    }
+  };
+
   clear = (): void => {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   };
@@ -175,6 +189,7 @@ class Card {
     this.drawHealth();
     this.drawCost();
     this.drawDescription();
+    this.drawName();
   };
 }
 
