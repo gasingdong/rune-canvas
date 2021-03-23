@@ -43,11 +43,16 @@ class Card {
     fillStyle = 'white',
     strokeStyle = 'black'
   ): void => {
+    ctx.save();
     ctx.font = font;
-    ctx.strokeStyle = strokeStyle;
-    ctx.strokeText(text, x, y);
     ctx.fillStyle = fillStyle;
+    ctx.strokeStyle = strokeStyle;
+    ctx.lineWidth = 3;
+    ctx.lineJoin = 'round';
+    ctx.miterLimit = 2;
+    ctx.strokeText(text, x, y);
     ctx.fillText(text, x, y);
+    ctx.restore();
   };
 
   drawArt = (): void => {
