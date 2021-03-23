@@ -8,6 +8,8 @@ class Card {
 
   static readonly STAT_WHITE = 'white';
 
+  static readonly STAT_OFFWHITE = '#f6e3e3';
+
   static readonly BACKGROUND_COLOR = '#1c1c1c';
 
   private readonly canvas: HTMLCanvasElement;
@@ -40,17 +42,19 @@ class Card {
     x: number,
     y: number,
     font: string,
+    fontSize: number,
     fillStyle = 'white',
     strokeStyle = 'black'
   ): void => {
     ctx.save();
-    ctx.font = font;
+    ctx.translate(0.5, 0.5);
+    ctx.font = `${fontSize}px ${font}`;
+    ctx.fillStyle = strokeStyle;
+    ctx.fillText(text, x - 1, y);
+    ctx.fillText(text, x + 1, y);
+    ctx.fillText(text, x, y - 1);
+    ctx.fillText(text, x, y + 1);
     ctx.fillStyle = fillStyle;
-    ctx.strokeStyle = strokeStyle;
-    ctx.lineWidth = 3;
-    ctx.lineJoin = 'round';
-    ctx.miterLimit = 2;
-    ctx.strokeText(text, x, y);
     ctx.fillText(text, x, y);
     ctx.restore();
   };
@@ -111,38 +115,40 @@ class Card {
   };
 
   drawPower = (): void => {
-    this.ctx.fillStyle = Card.STAT_WHITE;
     this.ctx.textAlign = 'center';
     this.drawStrokedText(
       this.ctx,
       `${this.meta.power}`,
       88,
       this.canvas.height - 86,
-      '72px Beaufort-Bold'
+      'Beaufort-Bold',
+      75,
+      Card.STAT_OFFWHITE
     );
   };
 
   drawHealth = (): void => {
-    this.ctx.fillStyle = Card.STAT_WHITE;
     this.ctx.textAlign = 'center';
     this.drawStrokedText(
       this.ctx,
       `${this.meta.health}`,
       this.canvas.width - 88,
       this.canvas.height - 86,
-      '72px Beaufort-Bold'
+      'Beaufort-Bold',
+      75
     );
   };
 
   drawCost = (): void => {
-    this.ctx.fillStyle = Card.STAT_WHITE;
     this.ctx.textAlign = 'center';
     this.drawStrokedText(
       this.ctx,
       `${this.meta.cost}`,
-      90,
+      88,
       133,
-      '92px Beaufort-Bold'
+      'Beaufort-Bold',
+      92,
+      Card.STAT_OFFWHITE
     );
   };
 
