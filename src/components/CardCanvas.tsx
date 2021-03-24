@@ -130,9 +130,12 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
               description: image,
             });
           };
-          image.src = getHtmlToData(meta.description, ctx, 580, 500);
+          const description = meta.description
+            .replace(/\[+([^\][]+)]+/g, '<span class="vocab">$1</span>')
+            .replace(/{+([^}{]+)}+/g, '<span class="name">$1</span>');
+          image.src = getHtmlToData(description, ctx, 580, 500);
           const div = document.createElement('div');
-          div.innerHTML = meta.description.replace(/(?:\r\n|\r|\n)/g, '<br>');
+          div.innerHTML = description.replace(/(?:\r\n|\r|\n)/g, '<br>');
           div.style.width = '565px';
           div.style.maxHeight = '1000px';
           div.style.fontSize = '34px';

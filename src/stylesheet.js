@@ -8,6 +8,13 @@ const css = `
       line-height: 40px;
       text-align: center;
       letter-spacing: -0.7px;
+      white-space: nowrap;
+    }
+    .vocab {
+      color: rgba(250, 214, 90, 1);
+    }
+    .name {
+      color: rgba(73, 160, 248, 1);
     }
   </style>
 `;
