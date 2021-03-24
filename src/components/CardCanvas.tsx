@@ -65,7 +65,7 @@ const CardCanvas: React.FC<CardCanvasProps> = (props: CardCanvasProps) => {
     return `${
       'data:image/svg+xml;charset=utf-8,' +
       `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">` +
-      `${css}<foreignObject width="100%" height="100%">${xml}</foreignObject>` +
+      `${css}<foreignObject width="${width}" height="${height}">${xml}</foreignObject>` +
       `</svg>`
     }`;
   };
