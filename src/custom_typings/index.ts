@@ -16,6 +16,7 @@ export interface CardMeta {
 export interface CardImages {
   frames: HTMLImageElement | null;
   icons: HTMLImageElement | null;
+  name: HTMLImageElement | null;
   description: HTMLImageElement | null;
   art: HTMLImageElement | null;
 }

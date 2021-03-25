@@ -22,18 +22,22 @@ class Card {
 
   private readonly descriptionHeight: number;
 
+  private readonly nameHeight: number;
+
   constructor(
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D,
     meta: CardMeta,
     images: CardImages,
-    descriptionHeight: number
+    descriptionHeight: number,
+    nameHeight: number
   ) {
     this.canvas = canvas;
     this.ctx = ctx;
     this.meta = meta;
     this.images = images;
     this.descriptionHeight = descriptionHeight;
+    this.nameHeight = nameHeight;
   }
 
   drawStrokedText = (
@@ -121,7 +125,7 @@ class Card {
       `${this.meta.power}`,
       88,
       this.canvas.height - 86,
-      'Beaufort-Bold',
+      'BeaufortBold',
       75,
       Card.STAT_OFFWHITE
     );
@@ -134,7 +138,7 @@ class Card {
       `${this.meta.health}`,
       this.canvas.width - 88,
       this.canvas.height - 86,
-      'Beaufort-Bold',
+      'BeaufortBold',
       75
     );
   };
@@ -146,7 +150,7 @@ class Card {
       `${this.meta.cost}`,
       88,
       133,
-      'Beaufort-Bold',
+      'BeaufortBold',
       92,
       Card.STAT_OFFWHITE
     );
@@ -163,15 +167,11 @@ class Card {
   };
 
   drawName = (): void => {
-    if (this.meta.name) {
-      const name = this.meta.name.toLocaleUpperCase();
-      this.drawStrokedText(
-        this.ctx,
-        name,
-        this.canvas.width / 2 - this.ctx.measureText(name).width / 2,
-        this.canvas.height / 2 + 100,
-        'Beaufort-Bold',
-        57
+    if (this.images.name) {
+      this.ctx.drawImage(
+        this.images.name,
+        48,
+        this.canvas.height / 2 + 229 - this.nameHeight
       );
     }
   };
